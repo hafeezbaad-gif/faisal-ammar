@@ -46,6 +46,17 @@ function Landing() {
   );
 }
 
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="mx-auto mb-14 flex max-w-7xl items-center gap-4 px-6">
+      <span className="h-px flex-1 bg-hairline" />
+      <h2 className="font-display text-3xl font-extrabold tracking-tight text-foreground md:text-4xl">
+        {children}
+      </h2>
+      <span className="h-px flex-1 bg-hairline" />
+    </div>
+  );
+
 function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -228,6 +239,7 @@ function Metric({ value, label }: { value: string; label: string }) {
 function About() {
   return (
     <section id="about" className="relative py-24 md:py-32">
+      <SectionLabel>About</SectionLabel>
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-6 lg:grid-cols-2 lg:gap-16">
         <div>
           <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-primary">
@@ -357,6 +369,7 @@ const SERVICES = [
 function Services() {
   return (
     <section id="services" className="relative overflow-hidden py-24 md:py-32">
+      <SectionLabel>Services</SectionLabel>
       <div className="pointer-events-none absolute right-0 top-1/4 h-[400px] w-[400px] rounded-full bg-primary/10 blur-[120px]" />
 
       <div className="mx-auto max-w-7xl px-6">
@@ -456,6 +469,7 @@ const CASES = [
 function CaseStudy() {
   return (
     <section id="case-study" className="relative py-24 md:py-32">
+      <SectionLabel>Case Study</SectionLabel>
       <div className="mx-auto max-w-7xl px-6">
         <div className="max-w-2xl">
           <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-primary">
@@ -545,6 +559,7 @@ function Contact() {
 
   return (
     <section id="contact" className="relative overflow-hidden py-24 md:py-32">
+      <SectionLabel>Contact</SectionLabel>
       <div className="pointer-events-none absolute -left-32 bottom-0 h-[500px] w-[500px] rounded-full bg-primary/10 blur-[140px]" />
 
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-6 lg:grid-cols-2 lg:gap-16">
