@@ -604,8 +604,8 @@ function Contact() {
 
           <div className="mt-10 space-y-4">
             <ContactRow icon={MapPin} label="Location" value="Sector I-8, Islamabad" />
-            <ContactRow icon={Mail} label="Email" value="contact@fbawithfaisal.com" />
-            <ContactRow icon={Phone} label="Phone" value="+92 346 5767577" />
+            <ContactRow icon={Mail} label="Email" value="faisalammar6622@gmail.com" />
+            <ContactRow icon={Phone} label="Phone" value="+92 3467558646" />
           </div>
 
           <div className="mt-10 flex items-center gap-3">
