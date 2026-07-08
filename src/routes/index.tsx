@@ -427,20 +427,18 @@ function Services() {
           </p>
         </div>
 
-        <div className="mt-14 grid grid-cols-2 gap-5 md:grid-cols-4 md:grid-rows-2">
-          {SERVICES.map(({ icon: Icon, title, desc, pos, size }, i) => (
+        <div className="mt-14 grid grid-cols-1 gap-5 md:grid-cols-3">
+          {SERVICES.map(({ icon: Icon, title, bullets }, i) => (
             <div
               key={title}
-              className={`group relative overflow-hidden rounded-[36px] border border-hairline bg-surface/70 p-7 transition-all duration-500 hover:-translate-y-1 hover:border-primary/50 hover:bg-surface hover:shadow-[var(--shadow-glow-sm)] ${pos}`}
+              className="group relative overflow-hidden border border-hairline bg-surface/70 p-7 transition-all duration-500 hover:-translate-y-1 hover:border-primary/50 hover:bg-surface hover:shadow-[var(--shadow-glow-sm)]"
               style={{
                 borderRadius:
                   i === 0
                     ? "48px 32px 48px 32px"
                     : i === 1
                     ? "32px 48px 32px 48px"
-                    : i === 2
-                    ? "40px"
-                    : "32px 48px 32px 48px",
+                    : "40px",
               }}
             >
               <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-primary/20 opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100" />
@@ -448,19 +446,17 @@ function Services() {
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/15 text-primary ring-1 ring-inset ring-primary/25">
                   <Icon size={20} />
                 </div>
-                <h3
-                  className={`mt-6 font-display font-bold leading-tight text-foreground ${
-                    size === "lg" ? "text-2xl md:text-3xl" : "text-xl"
-                  }`}
-                >
+                <h3 className="mt-6 font-display text-xl font-bold leading-tight text-foreground">
                   {title}
                 </h3>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{desc}</p>
-                <div className="mt-auto pt-6">
-                  <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary transition-transform group-hover:translate-x-1">
-                    Learn more <ArrowRight size={12} />
-                  </span>
-                </div>
+                <ul className="mt-4 space-y-2.5 text-sm text-muted-foreground">
+                  {bullets.map((b) => (
+                    <li key={b} className="flex items-start gap-2.5">
+                      <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                      <span className="text-foreground/90">{b}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
           ))}
