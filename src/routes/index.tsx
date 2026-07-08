@@ -56,6 +56,8 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
       <span className="h-px flex-1 bg-hairline" />
     </div>
   );
+}
+
 
 function Header() {
   const [scrolled, setScrolled] = useState(false);
