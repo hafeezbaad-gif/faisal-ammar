@@ -269,22 +269,6 @@ function About() {
             </p>
           </div>
 
-          <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2">
-            {[
-              "Data-driven product selection",
-              "Supplier & QC management",
-              "Bulletproof ranking playbooks",
-              "Category-native creative direction",
-            ].map((item) => (
-              <div
-                key={item}
-                className="flex items-center gap-3 rounded-xl border border-hairline bg-surface/60 px-4 py-3 text-sm"
-              >
-                <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-                {item}
-              </div>
-            ))}
-          </div>
         </div>
 
         <div>
