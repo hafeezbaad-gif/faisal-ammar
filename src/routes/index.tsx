@@ -197,11 +197,6 @@ function Hero() {
                 className="h-full w-full object-cover object-top"
               />
             </div>
-            {/* Floating accent tag */}
-            <div className="absolute -left-4 bottom-16 flex items-center gap-2 rounded-full border border-hairline bg-surface/90 px-3 py-1.5 text-xs font-medium backdrop-blur">
-              <span className="h-2 w-2 rounded-full bg-primary" />
-              Available for Q1
-            </div>
           </div>
         </div>
 
