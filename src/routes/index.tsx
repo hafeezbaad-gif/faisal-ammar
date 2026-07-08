@@ -419,10 +419,6 @@ function Services() {
               My Special Service For Your <span className="text-gradient-primary">Business Development</span>
             </h2>
           </div>
-          <p className="max-w-sm text-sm text-muted-foreground">
-            Every engagement is scoped around measurable outcomes — ROAS,
-            velocity, and margin — not vanity metrics.
-          </p>
         </div>
 
         <div className="mt-14 grid grid-cols-1 gap-5 md:grid-cols-3">
