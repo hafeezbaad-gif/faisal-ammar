@@ -287,32 +287,62 @@ function About() {
             What My Clients Say About Results
           </h3>
 
-          <figure className="mt-8 rounded-3xl border border-hairline bg-surface/70 p-8 shadow-[0_1px_0_0_var(--hairline)_inset]">
-            <Quote size={32} className="text-primary" />
-            <blockquote className="mt-4 text-lg leading-relaxed text-foreground/90">
-              "Faisal completely transformed our Amazon launch. Our PPC ad spend
-              dropped by 32% while our total organic keyword indexing jumped
-              straight to the top 3 spots within 45 days. Absolutely incredible
-              communication."
-            </blockquote>
-            <figcaption className="mt-6 flex items-center gap-4 border-t border-hairline pt-5">
-              <div className="flex h-11 w-11 items-center justify-center rounded-full bg-primary/20 font-display text-sm font-bold text-primary">
-                MK
-              </div>
-              <div>
-                <div className="text-sm font-semibold">Marcus K.</div>
-                <div className="text-xs text-muted-foreground">
-                  Founder, Premium Kitchenware Brand
-                </div>
-              </div>
-              <div className="ml-auto text-right">
-                <div className="font-display text-2xl font-bold text-primary">+287%</div>
-                <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
-                  Rev. in 90d
-                </div>
-              </div>
-            </figcaption>
-          </figure>
+          <div className="mt-8 space-y-4">
+            {[
+              {
+                quote:
+                  "Faisal completely transformed our Amazon launch. Our PPC ad spend dropped by 32% while our total organic keyword indexing jumped straight to the top 3 spots within 45 days. Absolutely incredible communication.",
+                initials: "MK",
+                name: "Marcus K.",
+                role: "Founder, Premium Kitchenware Brand",
+                stat: "+287%",
+                statLabel: "Rev. in 90d",
+              },
+              {
+                quote:
+                  "We were burning $18K/month on PPC with barely a 1.6x return. Faisal rebuilt our campaign structure from scratch and hit a 6.1x ROAS in the second month. He genuinely understands the algorithm.",
+                initials: "SA",
+                name: "Sarah A.",
+                role: "CEO, Wellness Supplements",
+                stat: "6.1x",
+                statLabel: "ROAS in 60d",
+              },
+              {
+                quote:
+                  "Our listings finally look and read like a real brand. A+ content, backend terms, image sequencing — everything got surgically upgraded. Conversion jumped from 8% to 21% on the hero SKU.",
+                initials: "DR",
+                name: "David R.",
+                role: "Owner, Outdoor Gear Co.",
+                stat: "21%",
+                statLabel: "New CVR",
+              },
+            ].map((t) => (
+              <figure
+                key={t.name}
+                className="rounded-3xl border border-hairline bg-surface/70 p-6 transition-colors hover:border-primary/40"
+              >
+                <Quote size={22} className="text-primary" />
+                <blockquote className="mt-3 text-sm leading-relaxed text-foreground/90">
+                  "{t.quote}"
+                </blockquote>
+                <figcaption className="mt-5 flex items-center gap-4 border-t border-hairline pt-4">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/20 font-display text-xs font-bold text-primary">
+                    {t.initials}
+                  </div>
+                  <div>
+                    <div className="text-sm font-semibold">{t.name}</div>
+                    <div className="text-xs text-muted-foreground">{t.role}</div>
+                  </div>
+                  <div className="ml-auto text-right">
+                    <div className="font-display text-xl font-bold text-primary">{t.stat}</div>
+                    <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
+                      {t.statLabel}
+                    </div>
+                  </div>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
 
           <div className="mt-4 grid grid-cols-3 gap-3">
             {[
