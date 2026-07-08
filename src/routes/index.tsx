@@ -259,7 +259,7 @@ function About() {
               strategies.
             </p>
             <p>
-              With 6+ years of experience and managing over $1M+ in ad spend, I
+              With 5+ years of experience and managing over $1M+ in ad spend, I
               focus on increasing ROAS, reducing CPA, and building scalable
               campaigns that deliver consistent results.
             </p>
