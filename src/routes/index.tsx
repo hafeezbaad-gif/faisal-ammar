@@ -252,14 +252,22 @@ function About() {
             <br />
             <span className="text-gradient-primary">7-figure storefronts.</span>
           </h2>
-          <p className="mt-6 text-base leading-relaxed text-muted-foreground">
-            I operate at the intersection of data science and merchandising —
-            translating raw marketplace signal into ranked listings, healthy
-            inventory, and predictable ROAS. Every launch starts with a private
-            product-viability model, moves through supplier vetting and creative
-            production, and ends with the ranking loops that separate serious
-            sellers from hobbyists.
-          </p>
+          <div className="mt-6 space-y-4 text-base leading-relaxed text-muted-foreground">
+            <p>
+              I help eCommerce brands and service businesses scale revenue and
+              generate high-quality leads using data-driven Meta and Google Ads
+              strategies.
+            </p>
+            <p>
+              With 6+ years of experience and managing over $1M+ in ad spend, I
+              focus on increasing ROAS, reducing CPA, and building scalable
+              campaigns that deliver consistent results.
+            </p>
+            <p>
+              From strategy to execution and optimization, I build systems that
+              help businesses grow faster and more profitably.
+            </p>
+          </div>
 
           <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2">
             {[
