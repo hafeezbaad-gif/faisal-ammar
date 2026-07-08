@@ -610,7 +610,7 @@ function Contact() {
           </p>
 
           <div className="mt-10 space-y-4">
-            <ContactRow icon={MapPin} label="Location" value="Sector I-8, Islamabad" />
+            <ContactRow icon={MapPin} label="Location" value="Faisalabad, Pakistan" />
             <ContactRow icon={Mail} label="Email" value="faisalammar6622@gmail.com" />
             <ContactRow icon={Phone} label="Phone" value="+92 3467558646" />
           </div>
