@@ -416,9 +416,7 @@ function Services() {
               Services
             </p>
             <h2 className="mt-3 font-display text-4xl font-bold leading-tight md:text-5xl">
-              An operating stack for
-              <br />
-              <span className="text-gradient-primary">serious Amazon brands.</span>
+              An operating stack for<br />serious Amazon brands.
             </h2>
           </div>
           <p className="max-w-sm text-sm text-muted-foreground">
