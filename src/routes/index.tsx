@@ -416,7 +416,11 @@ function Services() {
               Services
             </p>
             <h2 className="mt-3 font-display text-4xl font-bold leading-tight md:text-5xl">
-              My Special Service For Your <span className="text-gradient-primary">Business Development</span>
+              My Special Service&nbsp;
+              <br />
+              For Your&nbsp;
+              <br />
+              <span className="text-gradient-primary">Business Development</span>
             </h2>
           </div>
         </div>
