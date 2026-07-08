@@ -153,7 +153,7 @@ function Hero() {
             Hello, i'm
           </div>
           <h1 className="mt-5 font-display text-5xl font-extrabold leading-[1.02] tracking-tight md:text-6xl xl:text-7xl">
-            Faisal
+            Syed M. Faisal Ammar
             <br />
             <span className="text-gradient-primary">Amazon FBA Expert</span>
           </h1>
