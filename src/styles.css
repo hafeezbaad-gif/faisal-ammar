@@ -47,36 +47,36 @@
 :root {
   --radius: 0.875rem;
 
-  /* Dark-first palette (used as default) */
-  --background: oklch(0.14 0.005 285);
-  --foreground: oklch(0.96 0.005 285);
-  --surface: oklch(0.18 0.006 285);
-  --surface-elevated: oklch(0.21 0.008 285);
-  --hairline: oklch(0.28 0.008 285);
+  /* Light palette — warm, soft, high-readability */
+  --background: oklch(0.985 0.005 90);
+  --foreground: oklch(0.22 0.02 285);
+  --surface: oklch(0.965 0.008 90);
+  --surface-elevated: oklch(1 0 0);
+  --hairline: oklch(0.9 0.01 285);
 
-  --card: oklch(0.18 0.006 285);
-  --card-foreground: oklch(0.96 0.005 285);
-  --popover: oklch(0.18 0.006 285);
-  --popover-foreground: oklch(0.96 0.005 285);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.22 0.02 285);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.22 0.02 285);
 
-  --primary: oklch(0.72 0.18 300);
-  --primary-foreground: oklch(0.14 0.005 285);
+  --primary: oklch(0.55 0.2 300);
+  --primary-foreground: oklch(0.99 0.003 285);
 
-  --secondary: oklch(0.24 0.008 285);
-  --secondary-foreground: oklch(0.96 0.005 285);
+  --secondary: oklch(0.94 0.01 285);
+  --secondary-foreground: oklch(0.25 0.02 285);
 
-  --muted: oklch(0.22 0.006 285);
-  --muted-foreground: oklch(0.62 0.01 285);
+  --muted: oklch(0.95 0.008 285);
+  --muted-foreground: oklch(0.5 0.015 285);
 
-  --accent: oklch(0.72 0.18 300);
-  --accent-foreground: oklch(0.14 0.005 285);
+  --accent: oklch(0.55 0.2 300);
+  --accent-foreground: oklch(0.99 0.003 285);
 
-  --destructive: oklch(0.65 0.22 25);
-  --destructive-foreground: oklch(0.98 0.003 285);
+  --destructive: oklch(0.6 0.22 25);
+  --destructive-foreground: oklch(0.99 0.003 285);
 
-  --border: oklch(0.26 0.008 285);
-  --input: oklch(0.24 0.008 285);
-  --ring: oklch(0.72 0.18 300);
+  --border: oklch(0.9 0.01 285);
+  --input: oklch(0.92 0.01 285);
+  --ring: oklch(0.55 0.2 300);
 }
 
 @layer base {
@@ -86,8 +86,9 @@
 
   html {
     background-color: var(--color-background);
-    color-scheme: dark;
+    color-scheme: light;
   }
+
 
   body {
     background-color: var(--color-background);
