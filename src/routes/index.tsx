@@ -338,7 +338,7 @@ function Hero() {
           </motion.p>
           <motion.div variants={fadeUp} className="mt-8 flex flex-wrap items-center gap-3">
             <motion.a
-              href="#contact"
+              href="#contact" onClick={(e) => { e.preventDefault(); scrollToHash("#contact"); }}
               whileHover={{ y: -2 }}
               whileTap={{ scale: 0.95 }}
               className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-glow-sm)] transition-shadow hover:shadow-[var(--shadow-glow)]"
@@ -347,7 +347,7 @@ function Hero() {
               <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
             </motion.a>
             <motion.a
-              href="#contact"
+              href="#contact" onClick={(e) => { e.preventDefault(); scrollToHash("#contact"); }}
               whileHover={{ y: -2 }}
               whileTap={{ scale: 0.95 }}
               className="inline-flex items-center gap-2 rounded-full border border-hairline bg-surface/50 px-6 py-3.5 text-sm font-semibold text-foreground transition-colors hover:border-primary/50 hover:bg-surface"
