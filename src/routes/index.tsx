@@ -983,15 +983,24 @@ function Field({
 function Footer() {
   return (
     <footer className="border-t border-hairline bg-background">
-      <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-6 py-8 md:flex-row">
+      <div className="mx-auto flex max-w-7xl flex-col items-center gap-6 px-6 py-10">
         <div className="font-display text-sm font-bold">
           <span className="text-primary">FBA</span>withFaisal
         </div>
-        <div className="text-xs text-muted-foreground">
-          © {new Date().getFullYear()} Faisal Abdul. All rights reserved.
-        </div>
-        <div className="text-xs text-muted-foreground">
-          Built for founders who ship.
+        <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+          {NAV.map((n) => (
+            <NavLink
+              key={n.href}
+              href={n.href}
+              className="text-xs font-medium text-muted-foreground transition-colors hover:text-primary"
+            >
+              {n.label}
+            </NavLink>
+          ))}
+        </nav>
+        <div className="flex w-full flex-col items-center justify-between gap-2 border-t border-hairline pt-6 text-xs text-muted-foreground md:flex-row">
+          <div>© {new Date().getFullYear()} Faisal Abdul. All rights reserved.</div>
+          <div>Built for founders who ship.</div>
         </div>
       </div>
     </footer>
