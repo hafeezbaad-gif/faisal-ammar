@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent, type ReactNode } from "react";
+import { motion, type Variants } from "framer-motion";
 import {
   ArrowRight,
   Menu,
@@ -17,6 +18,42 @@ import {
   Sparkles,
 } from "lucide-react";
 import portrait from "@/assets/faisal-portrait.jpg";
+
+// ---------- Motion helpers ----------
+const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
+};
+
+const container: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.09, delayChildren: 0.05 } },
+};
+
+function Reveal({
+  children,
+  className,
+  delay = 0,
+  y = 24,
+}: {
+  children: ReactNode;
+  className?: string;
+  delay?: number;
+  y?: number;
+}) {
+  return (
+    <motion.div
+      className={className}
+      initial={{ opacity: 0, y }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
 
 export const Route = createFileRoute("/")({
   component: Landing,
@@ -48,13 +85,31 @@ function Landing() {
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <div className="mx-auto mb-14 flex max-w-7xl items-center gap-4 px-6">
-      <span className="h-px flex-1 bg-hairline" />
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+      className="mx-auto mb-14 flex max-w-7xl items-center gap-4 px-6"
+    >
+      <motion.span
+        className="h-px flex-1 bg-hairline origin-right"
+        initial={{ scaleX: 0 }}
+        whileInView={{ scaleX: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+      />
       <h2 className="font-display text-3xl font-extrabold tracking-tight text-foreground md:text-4xl">
         {children}
       </h2>
-      <span className="h-px flex-1 bg-hairline" />
-    </div>
+      <motion.span
+        className="h-px flex-1 bg-hairline origin-left"
+        initial={{ scaleX: 0 }}
+        whileInView={{ scaleX: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+      />
+    </motion.div>
   );
 }
 
@@ -71,14 +126,21 @@ function Header() {
   }, []);
 
   return (
-    <header
+    <motion.header
+      initial={{ y: -30, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "border-b border-hairline/60 bg-background/70 backdrop-blur-xl"
+          ? "border-b border-hairline/60 bg-background/70 backdrop-blur-md shadow-[0_8px_30px_-15px_rgba(0,0,0,0.15)]"
           : "border-b border-transparent"
       }`}
     >
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 md:h-20">
+      <div
+        className={`mx-auto flex max-w-7xl items-center justify-between px-6 transition-all duration-300 ${
+          scrolled ? "h-14 md:h-16" : "h-16 md:h-20"
+        }`}
+      >
         <a href="#home" className="font-display text-xl font-extrabold tracking-tight">
           <span className="text-primary">FBA</span>
           <span className="text-foreground">withFaisal</span>
@@ -89,7 +151,7 @@ function Header() {
             <a
               key={n.href}
               href={n.href}
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+              className="story-link text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
             >
               {n.label}
             </a>
@@ -103,13 +165,15 @@ function Header() {
           >
             LET'S TALK
           </a>
-          <button
+          <motion.button
             aria-label="Menu"
             onClick={() => setOpen((v) => !v)}
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-hairline bg-surface text-primary transition-all hover:border-primary hover:shadow-[var(--shadow-glow-sm)]"
+            whileHover={{ scale: 1.06 }}
+            whileTap={{ scale: 0.92 }}
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-hairline bg-surface text-primary transition-colors hover:border-primary hover:shadow-[var(--shadow-glow-sm)]"
           >
             <Menu size={18} />
-          </button>
+          </motion.button>
         </div>
       </div>
       {open && (
@@ -135,7 +199,7 @@ function Header() {
           </nav>
         </div>
       )}
-    </header>
+    </motion.header>
   );
 }
 
@@ -143,47 +207,90 @@ function Hero() {
   return (
     <section className="relative overflow-hidden pt-32 pb-24 md:pt-40 md:pb-32">
       <div className="pointer-events-none absolute inset-0 vertical-lines opacity-60" />
-      <div className="pointer-events-none absolute -left-40 top-1/3 h-[520px] w-[520px] rounded-full bg-primary/15 blur-[120px]" />
+      <motion.div
+        aria-hidden
+        className="pointer-events-none absolute -left-40 top-1/3 h-[520px] w-[520px] rounded-full bg-primary/15 blur-[120px]"
+        animate={{ y: [0, -30, 0], x: [0, 15, 0] }}
+        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        aria-hidden
+        className="pointer-events-none absolute right-10 top-24 h-32 w-32 rounded-full bg-accent/25 blur-3xl"
+        animate={{ y: [0, 20, 0] }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+      />
 
       <div className="relative mx-auto grid max-w-7xl grid-cols-1 gap-14 px-6 lg:grid-cols-12 lg:gap-8">
         {/* Left copy */}
-        <div className="lg:col-span-5 lg:pt-6">
-          <div className="inline-flex items-center gap-2 rounded-full border border-hairline bg-surface/70 px-3 py-1.5 text-xs text-muted-foreground">
-            <Sparkles size={12} className="text-primary" />
+        <motion.div
+          variants={container}
+          initial="hidden"
+          animate="show"
+          className="lg:col-span-5 lg:pt-6"
+        >
+          <motion.div
+            variants={fadeUp}
+            className="inline-flex items-center gap-2 rounded-full border border-hairline bg-surface/70 px-3 py-1.5 text-xs text-muted-foreground"
+          >
+            <motion.span
+              animate={{ rotate: [0, 15, -10, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <Sparkles size={12} className="text-primary" />
+            </motion.span>
             Hello, i'm
-          </div>
-          <h1 className="mt-5 font-display text-5xl font-extrabold leading-[1.02] tracking-tight md:text-6xl xl:text-7xl">
+          </motion.div>
+          <motion.h1
+            variants={fadeUp}
+            className="mt-5 font-display text-5xl font-extrabold leading-[1.02] tracking-tight md:text-6xl xl:text-7xl"
+          >
             Syed M. Faisal Ammar
             <br />
             <span className="text-gradient-primary">Amazon FBA Expert</span>
-          </h1>
-          <p className="mt-6 max-w-lg text-base leading-relaxed text-muted-foreground md:text-lg">
+          </motion.h1>
+          <motion.p
+            variants={fadeUp}
+            className="mt-6 max-w-lg text-base leading-relaxed text-muted-foreground md:text-lg"
+          >
             Helping e-commerce brands and private label investors generate
             <span className="text-foreground"> $50K–$300K+/Month </span>
             through precision PPC, automated logistics, and dominant listing
             optimization.
-          </p>
-          <div className="mt-8 flex flex-wrap items-center gap-3">
-            <a
+          </motion.p>
+          <motion.div variants={fadeUp} className="mt-8 flex flex-wrap items-center gap-3">
+            <motion.a
               href="#contact"
-              className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-glow-sm)] transition-all hover:shadow-[var(--shadow-glow)]"
+              whileHover={{ y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-glow-sm)] transition-shadow hover:shadow-[var(--shadow-glow)]"
             >
               Scale Your Store Now
               <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
-            </a>
-            <a
+            </motion.a>
+            <motion.a
               href="#contact"
-              className="inline-flex items-center gap-2 rounded-full border border-hairline bg-surface/50 px-6 py-3.5 text-sm font-semibold text-foreground transition-all hover:border-primary/50 hover:bg-surface"
+              whileHover={{ y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              className="inline-flex items-center gap-2 rounded-full border border-hairline bg-surface/50 px-6 py-3.5 text-sm font-semibold text-foreground transition-colors hover:border-primary/50 hover:bg-surface"
             >
               Schedule A Call
               <ArrowRight size={16} />
-            </a>
-          </div>
-        </div>
+            </motion.a>
+          </motion.div>
+        </motion.div>
 
         {/* Center portrait */}
-        <div className="relative flex items-center justify-center lg:col-span-4">
-          <div className="relative aspect-[3/4] w-full max-w-md">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.92 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+          className="relative flex items-center justify-center lg:col-span-4"
+        >
+          <motion.div
+            className="relative aspect-[3/4] w-full max-w-md"
+            animate={{ y: [0, -12, 0] }}
+            transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+          >
             {/* Split purple circle */}
             <div className="absolute inset-x-4 top-8 bottom-8 rounded-full bg-primary/80" />
             <div className="absolute inset-x-4 top-8 bottom-8 rounded-full bg-background [clip-path:polygon(50%_0,100%_0,100%_100%,50%_100%)]" />
@@ -197,11 +304,16 @@ function Hero() {
                 className="h-full w-full object-cover object-top"
               />
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
         {/* Right metrics */}
-        <div className="lg:col-span-3">
+        <motion.div
+          initial={{ opacity: 0, x: 30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+          className="lg:col-span-3"
+        >
           <div className="rounded-3xl border border-hairline bg-surface/70 p-6 backdrop-blur">
             <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-muted-foreground">
               Track Record
@@ -211,12 +323,22 @@ function Hero() {
               <Metric value="40+" label="Brands Scaled" />
               <Metric value="8.5x+" label="Average ROAS Achieved" />
             </div>
-            <div className="mt-6 flex items-center gap-2 rounded-2xl border border-primary/20 bg-primary/10 px-3 py-2 text-xs text-foreground/90">
+            <motion.div
+              className="mt-6 flex items-center gap-2 rounded-2xl border border-primary/20 bg-primary/10 px-3 py-2 text-xs text-foreground/90"
+              animate={{
+                boxShadow: [
+                  "0 0 0 0 color-mix(in oklab, var(--primary) 30%, transparent)",
+                  "0 0 24px 4px color-mix(in oklab, var(--primary) 20%, transparent)",
+                  "0 0 0 0 color-mix(in oklab, var(--primary) 30%, transparent)",
+                ],
+              }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            >
               <TrendingUp size={14} className="text-primary" />
               Growth-first, retainer-lean
-            </div>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
@@ -238,7 +360,7 @@ function About() {
     <section id="about" className="relative py-24 md:py-32">
       <SectionLabel>About</SectionLabel>
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-6 lg:grid-cols-2 lg:gap-16">
-        <div>
+        <Reveal>
           <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-primary">
             What I Do
           </p>
@@ -263,18 +385,25 @@ function About() {
               help businesses grow faster and more profitably.
             </p>
           </div>
-
-        </div>
+        </Reveal>
 
         <div>
-          <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-primary">
-            Client Results
-          </p>
-          <h3 className="mt-3 font-display text-3xl font-bold md:text-4xl">
-            What My Clients Say About Results
-          </h3>
+          <Reveal>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-primary">
+              Client Results
+            </p>
+            <h3 className="mt-3 font-display text-3xl font-bold md:text-4xl">
+              What My Clients Say About Results
+            </h3>
+          </Reveal>
 
-          <div className="mt-8 space-y-4">
+          <motion.div
+            className="mt-8 space-y-4"
+            variants={container}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: "-60px" }}
+          >
             {[
               {
                 quote:
@@ -304,9 +433,12 @@ function About() {
                 statLabel: "New CVR",
               },
             ].map((t) => (
-              <figure
+              <motion.figure
                 key={t.name}
-                className="rounded-3xl border border-hairline bg-surface/70 p-6 transition-colors hover:border-primary/40"
+                variants={fadeUp}
+                whileHover={{ y: -4 }}
+                transition={{ type: "spring", stiffness: 300, damping: 22 }}
+                className="rounded-3xl border border-hairline bg-surface/70 p-6 transition-colors hover:border-primary/40 hover:shadow-xl"
               >
                 <Quote size={22} className="text-primary" />
                 <blockquote className="mt-3 text-sm leading-relaxed text-foreground/90">
@@ -327,27 +459,35 @@ function About() {
                     </div>
                   </div>
                 </figcaption>
-              </figure>
+              </motion.figure>
             ))}
-          </div>
+          </motion.div>
 
-          <div className="mt-4 grid grid-cols-3 gap-3">
+          <motion.div
+            className="mt-4 grid grid-cols-3 gap-3"
+            variants={container}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true }}
+          >
             {[
               { k: "45d", v: "Top-3 rank" },
               { k: "-32%", v: "Ad spend" },
               { k: "4.2x", v: "Sustained ROAS" },
             ].map((s) => (
-              <div
+              <motion.div
                 key={s.v}
+                variants={fadeUp}
+                whileHover={{ scale: 1.04 }}
                 className="rounded-2xl border border-hairline bg-surface/40 p-4 text-center"
               >
                 <div className="font-display text-xl font-bold text-foreground">{s.k}</div>
                 <div className="mt-1 text-[10px] uppercase tracking-wider text-muted-foreground">
                   {s.v}
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>
@@ -405,26 +545,37 @@ function Services() {
       <div className="pointer-events-none absolute right-0 top-1/4 h-[400px] w-[400px] rounded-full bg-primary/10 blur-[120px]" />
 
       <div className="mx-auto max-w-7xl px-6">
-        <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
-          <div>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-primary">
-              Services
-            </p>
-            <h2 className="mt-3 font-display text-4xl font-bold leading-tight md:text-5xl">
-              My Special Service&nbsp;
-              <br />
-              For Your&nbsp;
-              <br />
-              <span className="text-gradient-primary">Business Development</span>
-            </h2>
+        <Reveal>
+          <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-primary">
+                Services
+              </p>
+              <h2 className="mt-3 font-display text-4xl font-bold leading-tight md:text-5xl">
+                My Special Service&nbsp;
+                <br />
+                For Your&nbsp;
+                <br />
+                <span className="text-gradient-primary">Business Development</span>
+              </h2>
+            </div>
           </div>
-        </div>
+        </Reveal>
 
-        <div className="mt-14 grid grid-cols-1 gap-5 md:grid-cols-3">
+        <motion.div
+          className="mt-14 grid grid-cols-1 gap-5 md:grid-cols-3"
+          variants={container}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-80px" }}
+        >
           {SERVICES.map(({ icon: Icon, title, bullets }, i) => (
-            <div
+            <motion.div
               key={title}
-              className="group relative overflow-hidden border border-hairline bg-surface/70 p-7 transition-all duration-500 hover:-translate-y-1 hover:border-primary/50 hover:bg-surface hover:shadow-[var(--shadow-glow-sm)]"
+              variants={fadeUp}
+              whileHover={{ y: -8 }}
+              transition={{ type: "spring", stiffness: 260, damping: 22 }}
+              className="group relative overflow-hidden border border-hairline bg-surface/70 p-7 transition-colors duration-500 hover:border-primary/50 hover:bg-surface hover:shadow-2xl"
               style={{
                 borderRadius:
                   i === 0
@@ -436,9 +587,13 @@ function Services() {
             >
               <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-primary/20 opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100" />
               <div className="relative flex h-full flex-col">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/15 text-primary ring-1 ring-inset ring-primary/25">
+                <motion.div
+                  whileHover={{ rotate: 8, scale: 1.08 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                  className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/15 text-primary ring-1 ring-inset ring-primary/25"
+                >
                   <Icon size={20} />
-                </div>
+                </motion.div>
                 <h3 className="mt-6 font-display text-xl font-bold leading-tight text-foreground">
                   {title}
                 </h3>
@@ -451,9 +606,9 @@ function Services() {
                   ))}
                 </ul>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
@@ -497,29 +652,50 @@ function CaseStudy() {
     <section id="case-study" className="relative py-24 md:py-32">
       <SectionLabel>Case Study</SectionLabel>
       <div className="mx-auto max-w-7xl px-6">
-        <div className="max-w-2xl">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-primary">
-            Case Studies
-          </p>
-          <h2 className="mt-3 font-display text-4xl font-bold leading-tight md:text-5xl">
-            Real accounts. <span className="text-gradient-primary">Real receipts.</span>
-          </h2>
-        </div>
+        <Reveal>
+          <div className="max-w-2xl">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-primary">
+              Case Studies
+            </p>
+            <h2 className="mt-3 font-display text-4xl font-bold leading-tight md:text-5xl">
+              Real accounts. <span className="text-gradient-primary">Real receipts.</span>
+            </h2>
+          </div>
+        </Reveal>
 
-        <div className="mt-14 grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <motion.div
+          className="mt-14 grid grid-cols-1 gap-6 lg:grid-cols-2"
+          variants={container}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-80px" }}
+        >
           {CASES.map((c, i) => (
-            <article
+            <motion.article
               key={c.title}
-              className={`group relative overflow-hidden rounded-[32px] border border-hairline bg-surface/70 p-8 md:p-10 ${
+              variants={fadeUp}
+              whileHover={{ y: -6 }}
+              transition={{ type: "spring", stiffness: 260, damping: 22 }}
+              className={`group relative overflow-hidden rounded-[32px] border border-hairline bg-surface/70 p-8 md:p-10 hover:shadow-2xl ${
                 i === 0 ? "lg:mt-0" : "lg:mt-12"
               }`}
             >
               <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
               <div className="flex items-center justify-between">
-                <span className="rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-primary">
+                <motion.span
+                  className="relative overflow-hidden rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-primary"
+                  animate={{
+                    boxShadow: [
+                      "0 0 0 0 color-mix(in oklab, var(--primary) 30%, transparent)",
+                      "0 0 14px 2px color-mix(in oklab, var(--primary) 25%, transparent)",
+                      "0 0 0 0 color-mix(in oklab, var(--primary) 30%, transparent)",
+                    ],
+                  }}
+                  transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
+                >
                   {c.tag}
-                </span>
+                </motion.span>
                 <span className="text-xs text-muted-foreground">Case 0{i + 1}</span>
               </div>
 
@@ -554,9 +730,9 @@ function CaseStudy() {
                   </div>
                 ))}
               </div>
-            </article>
+            </motion.article>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
@@ -658,15 +834,17 @@ function Contact() {
               className="mt-2 w-full resize-none rounded-2xl border border-hairline bg-background/60 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
             />
           </div>
-          <button
+          <motion.button
             type="submit"
-            className="group mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-4 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-glow-sm)] transition-all hover:shadow-[var(--shadow-glow)]"
+            whileHover={{ y: -2 }}
+            whileTap={{ scale: 0.96 }}
+            className="group mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-4 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-glow-sm)] transition-shadow hover:shadow-[var(--shadow-glow)]"
           >
             {sent ? "Thanks — I'll be in touch shortly ✓" : "Get My Free Growth Plan"}
             {!sent && (
               <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
             )}
-          </button>
+          </motion.button>
         </form>
       </div>
     </section>
