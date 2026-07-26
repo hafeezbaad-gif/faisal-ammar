@@ -207,47 +207,90 @@ function Hero() {
   return (
     <section className="relative overflow-hidden pt-32 pb-24 md:pt-40 md:pb-32">
       <div className="pointer-events-none absolute inset-0 vertical-lines opacity-60" />
-      <div className="pointer-events-none absolute -left-40 top-1/3 h-[520px] w-[520px] rounded-full bg-primary/15 blur-[120px]" />
+      <motion.div
+        aria-hidden
+        className="pointer-events-none absolute -left-40 top-1/3 h-[520px] w-[520px] rounded-full bg-primary/15 blur-[120px]"
+        animate={{ y: [0, -30, 0], x: [0, 15, 0] }}
+        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        aria-hidden
+        className="pointer-events-none absolute right-10 top-24 h-32 w-32 rounded-full bg-accent/25 blur-3xl"
+        animate={{ y: [0, 20, 0] }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+      />
 
       <div className="relative mx-auto grid max-w-7xl grid-cols-1 gap-14 px-6 lg:grid-cols-12 lg:gap-8">
         {/* Left copy */}
-        <div className="lg:col-span-5 lg:pt-6">
-          <div className="inline-flex items-center gap-2 rounded-full border border-hairline bg-surface/70 px-3 py-1.5 text-xs text-muted-foreground">
-            <Sparkles size={12} className="text-primary" />
+        <motion.div
+          variants={container}
+          initial="hidden"
+          animate="show"
+          className="lg:col-span-5 lg:pt-6"
+        >
+          <motion.div
+            variants={fadeUp}
+            className="inline-flex items-center gap-2 rounded-full border border-hairline bg-surface/70 px-3 py-1.5 text-xs text-muted-foreground"
+          >
+            <motion.span
+              animate={{ rotate: [0, 15, -10, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <Sparkles size={12} className="text-primary" />
+            </motion.span>
             Hello, i'm
-          </div>
-          <h1 className="mt-5 font-display text-5xl font-extrabold leading-[1.02] tracking-tight md:text-6xl xl:text-7xl">
+          </motion.div>
+          <motion.h1
+            variants={fadeUp}
+            className="mt-5 font-display text-5xl font-extrabold leading-[1.02] tracking-tight md:text-6xl xl:text-7xl"
+          >
             Syed M. Faisal Ammar
             <br />
             <span className="text-gradient-primary">Amazon FBA Expert</span>
-          </h1>
-          <p className="mt-6 max-w-lg text-base leading-relaxed text-muted-foreground md:text-lg">
+          </motion.h1>
+          <motion.p
+            variants={fadeUp}
+            className="mt-6 max-w-lg text-base leading-relaxed text-muted-foreground md:text-lg"
+          >
             Helping e-commerce brands and private label investors generate
             <span className="text-foreground"> $50K–$300K+/Month </span>
             through precision PPC, automated logistics, and dominant listing
             optimization.
-          </p>
-          <div className="mt-8 flex flex-wrap items-center gap-3">
-            <a
+          </motion.p>
+          <motion.div variants={fadeUp} className="mt-8 flex flex-wrap items-center gap-3">
+            <motion.a
               href="#contact"
-              className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-glow-sm)] transition-all hover:shadow-[var(--shadow-glow)]"
+              whileHover={{ y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-glow-sm)] transition-shadow hover:shadow-[var(--shadow-glow)]"
             >
               Scale Your Store Now
               <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
-            </a>
-            <a
+            </motion.a>
+            <motion.a
               href="#contact"
-              className="inline-flex items-center gap-2 rounded-full border border-hairline bg-surface/50 px-6 py-3.5 text-sm font-semibold text-foreground transition-all hover:border-primary/50 hover:bg-surface"
+              whileHover={{ y: -2 }}
+              whileTap={{ scale: 0.95 }}
+              className="inline-flex items-center gap-2 rounded-full border border-hairline bg-surface/50 px-6 py-3.5 text-sm font-semibold text-foreground transition-colors hover:border-primary/50 hover:bg-surface"
             >
               Schedule A Call
               <ArrowRight size={16} />
-            </a>
-          </div>
-        </div>
+            </motion.a>
+          </motion.div>
+        </motion.div>
 
         {/* Center portrait */}
-        <div className="relative flex items-center justify-center lg:col-span-4">
-          <div className="relative aspect-[3/4] w-full max-w-md">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.92 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+          className="relative flex items-center justify-center lg:col-span-4"
+        >
+          <motion.div
+            className="relative aspect-[3/4] w-full max-w-md"
+            animate={{ y: [0, -12, 0] }}
+            transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+          >
             {/* Split purple circle */}
             <div className="absolute inset-x-4 top-8 bottom-8 rounded-full bg-primary/80" />
             <div className="absolute inset-x-4 top-8 bottom-8 rounded-full bg-background [clip-path:polygon(50%_0,100%_0,100%_100%,50%_100%)]" />
@@ -261,11 +304,16 @@ function Hero() {
                 className="h-full w-full object-cover object-top"
               />
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
         {/* Right metrics */}
-        <div className="lg:col-span-3">
+        <motion.div
+          initial={{ opacity: 0, x: 30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+          className="lg:col-span-3"
+        >
           <div className="rounded-3xl border border-hairline bg-surface/70 p-6 backdrop-blur">
             <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-muted-foreground">
               Track Record
@@ -275,12 +323,22 @@ function Hero() {
               <Metric value="40+" label="Brands Scaled" />
               <Metric value="8.5x+" label="Average ROAS Achieved" />
             </div>
-            <div className="mt-6 flex items-center gap-2 rounded-2xl border border-primary/20 bg-primary/10 px-3 py-2 text-xs text-foreground/90">
+            <motion.div
+              className="mt-6 flex items-center gap-2 rounded-2xl border border-primary/20 bg-primary/10 px-3 py-2 text-xs text-foreground/90"
+              animate={{
+                boxShadow: [
+                  "0 0 0 0 color-mix(in oklab, var(--primary) 30%, transparent)",
+                  "0 0 24px 4px color-mix(in oklab, var(--primary) 20%, transparent)",
+                  "0 0 0 0 color-mix(in oklab, var(--primary) 30%, transparent)",
+                ],
+              }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            >
               <TrendingUp size={14} className="text-primary" />
               Growth-first, retainer-lean
-            </div>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
