@@ -545,26 +545,37 @@ function Services() {
       <div className="pointer-events-none absolute right-0 top-1/4 h-[400px] w-[400px] rounded-full bg-primary/10 blur-[120px]" />
 
       <div className="mx-auto max-w-7xl px-6">
-        <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
-          <div>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-primary">
-              Services
-            </p>
-            <h2 className="mt-3 font-display text-4xl font-bold leading-tight md:text-5xl">
-              My Special Service&nbsp;
-              <br />
-              For Your&nbsp;
-              <br />
-              <span className="text-gradient-primary">Business Development</span>
-            </h2>
+        <Reveal>
+          <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-primary">
+                Services
+              </p>
+              <h2 className="mt-3 font-display text-4xl font-bold leading-tight md:text-5xl">
+                My Special Service&nbsp;
+                <br />
+                For Your&nbsp;
+                <br />
+                <span className="text-gradient-primary">Business Development</span>
+              </h2>
+            </div>
           </div>
-        </div>
+        </Reveal>
 
-        <div className="mt-14 grid grid-cols-1 gap-5 md:grid-cols-3">
+        <motion.div
+          className="mt-14 grid grid-cols-1 gap-5 md:grid-cols-3"
+          variants={container}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-80px" }}
+        >
           {SERVICES.map(({ icon: Icon, title, bullets }, i) => (
-            <div
+            <motion.div
               key={title}
-              className="group relative overflow-hidden border border-hairline bg-surface/70 p-7 transition-all duration-500 hover:-translate-y-1 hover:border-primary/50 hover:bg-surface hover:shadow-[var(--shadow-glow-sm)]"
+              variants={fadeUp}
+              whileHover={{ y: -8 }}
+              transition={{ type: "spring", stiffness: 260, damping: 22 }}
+              className="group relative overflow-hidden border border-hairline bg-surface/70 p-7 transition-colors duration-500 hover:border-primary/50 hover:bg-surface hover:shadow-2xl"
               style={{
                 borderRadius:
                   i === 0
@@ -576,9 +587,13 @@ function Services() {
             >
               <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-primary/20 opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100" />
               <div className="relative flex h-full flex-col">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/15 text-primary ring-1 ring-inset ring-primary/25">
+                <motion.div
+                  whileHover={{ rotate: 8, scale: 1.08 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                  className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/15 text-primary ring-1 ring-inset ring-primary/25"
+                >
                   <Icon size={20} />
-                </div>
+                </motion.div>
                 <h3 className="mt-6 font-display text-xl font-bold leading-tight text-foreground">
                   {title}
                 </h3>
@@ -591,9 +606,9 @@ function Services() {
                   ))}
                 </ul>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
