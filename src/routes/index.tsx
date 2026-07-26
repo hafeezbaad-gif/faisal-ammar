@@ -388,14 +388,22 @@ function About() {
         </Reveal>
 
         <div>
-          <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-primary">
-            Client Results
-          </p>
-          <h3 className="mt-3 font-display text-3xl font-bold md:text-4xl">
-            What My Clients Say About Results
-          </h3>
+          <Reveal>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-primary">
+              Client Results
+            </p>
+            <h3 className="mt-3 font-display text-3xl font-bold md:text-4xl">
+              What My Clients Say About Results
+            </h3>
+          </Reveal>
 
-          <div className="mt-8 space-y-4">
+          <motion.div
+            className="mt-8 space-y-4"
+            variants={container}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: "-60px" }}
+          >
             {[
               {
                 quote:
@@ -425,9 +433,12 @@ function About() {
                 statLabel: "New CVR",
               },
             ].map((t) => (
-              <figure
+              <motion.figure
                 key={t.name}
-                className="rounded-3xl border border-hairline bg-surface/70 p-6 transition-colors hover:border-primary/40"
+                variants={fadeUp}
+                whileHover={{ y: -4 }}
+                transition={{ type: "spring", stiffness: 300, damping: 22 }}
+                className="rounded-3xl border border-hairline bg-surface/70 p-6 transition-colors hover:border-primary/40 hover:shadow-xl"
               >
                 <Quote size={22} className="text-primary" />
                 <blockquote className="mt-3 text-sm leading-relaxed text-foreground/90">
@@ -448,27 +459,35 @@ function About() {
                     </div>
                   </div>
                 </figcaption>
-              </figure>
+              </motion.figure>
             ))}
-          </div>
+          </motion.div>
 
-          <div className="mt-4 grid grid-cols-3 gap-3">
+          <motion.div
+            className="mt-4 grid grid-cols-3 gap-3"
+            variants={container}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true }}
+          >
             {[
               { k: "45d", v: "Top-3 rank" },
               { k: "-32%", v: "Ad spend" },
               { k: "4.2x", v: "Sustained ROAS" },
             ].map((s) => (
-              <div
+              <motion.div
                 key={s.v}
+                variants={fadeUp}
+                whileHover={{ scale: 1.04 }}
                 className="rounded-2xl border border-hairline bg-surface/40 p-4 text-center"
               >
                 <div className="font-display text-xl font-bold text-foreground">{s.k}</div>
                 <div className="mt-1 text-[10px] uppercase tracking-wider text-muted-foreground">
                   {s.v}
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>
