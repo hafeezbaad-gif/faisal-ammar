@@ -54,6 +54,65 @@ function Reveal({
   );
 }
 
+// ---------- Smooth scroll + scrollspy ----------
+function scrollToHash(hash: string) {
+  const id = hash.replace(/^#/, "");
+  if (!id) return;
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.scrollIntoView({ behavior: "smooth", block: "start" });
+  history.replaceState(null, "", `#${id}`);
+}
+
+function useActiveSection(ids: string[]) {
+  const [active, setActive] = useState<string>(ids[0] ?? "");
+  useEffect(() => {
+    const els = ids
+      .map((id) => document.getElementById(id))
+      .filter((e): e is HTMLElement => !!e);
+    if (!els.length) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+        if (visible[0]) setActive(visible[0].target.id);
+      },
+      { rootMargin: "-40% 0px -50% 0px", threshold: [0, 0.25, 0.5, 0.75, 1] }
+    );
+    els.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, [ids.join(",")]);
+  return active;
+}
+
+function NavLink({
+  href,
+  onClick,
+  className,
+  children,
+}: {
+  href: string;
+  onClick?: () => void;
+  className?: string;
+  children: ReactNode;
+}) {
+  return (
+    <a
+      href={href}
+      onClick={(e) => {
+        if (href.startsWith("#")) {
+          e.preventDefault();
+          scrollToHash(href);
+        }
+        onClick?.();
+      }}
+      className={className}
+    >
+      {children}
+    </a>
+  );
+}
 
 export const Route = createFileRoute("/")({
   component: Landing,
@@ -69,7 +128,7 @@ const NAV = [
 
 function Landing() {
   return (
-    <div id="home" className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground">
       <Header />
       <main>
         <Hero />
