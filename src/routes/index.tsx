@@ -85,13 +85,31 @@ function Landing() {
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <div className="mx-auto mb-14 flex max-w-7xl items-center gap-4 px-6">
-      <span className="h-px flex-1 bg-hairline" />
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+      className="mx-auto mb-14 flex max-w-7xl items-center gap-4 px-6"
+    >
+      <motion.span
+        className="h-px flex-1 bg-hairline origin-right"
+        initial={{ scaleX: 0 }}
+        whileInView={{ scaleX: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+      />
       <h2 className="font-display text-3xl font-extrabold tracking-tight text-foreground md:text-4xl">
         {children}
       </h2>
-      <span className="h-px flex-1 bg-hairline" />
-    </div>
+      <motion.span
+        className="h-px flex-1 bg-hairline origin-left"
+        initial={{ scaleX: 0 }}
+        whileInView={{ scaleX: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+      />
+    </motion.div>
   );
 }
 
