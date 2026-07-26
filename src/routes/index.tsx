@@ -436,7 +436,7 @@ function Metric({ value, label }: { value: string; label: string }) {
 
 function About() {
   return (
-    <section id="about" className="relative py-24 md:py-32">
+    <section id="about" className="relative py-24 scroll-mt-24 md:py-32">
       <SectionLabel>About</SectionLabel>
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-6 lg:grid-cols-2 lg:gap-16">
         <Reveal>
@@ -619,7 +619,7 @@ const SERVICES = [
 
 function Services() {
   return (
-    <section id="services" className="relative overflow-hidden py-24 md:py-32">
+    <section id="services" className="relative overflow-hidden py-24 scroll-mt-24 md:py-32">
       <SectionLabel>Services</SectionLabel>
       <div className="pointer-events-none absolute right-0 top-1/4 h-[400px] w-[400px] rounded-full bg-primary/10 blur-[120px]" />
 
@@ -728,7 +728,7 @@ const CASES = [
 
 function CaseStudy() {
   return (
-    <section id="case-study" className="relative py-24 md:py-32">
+    <section id="case-study" className="relative py-24 scroll-mt-24 md:py-32">
       <SectionLabel>Case Study</SectionLabel>
       <div className="mx-auto max-w-7xl px-6">
         <Reveal>
@@ -839,7 +839,7 @@ function Contact() {
   };
 
   return (
-    <section id="contact" className="relative overflow-hidden py-24 md:py-32">
+    <section id="contact" className="relative overflow-hidden py-24 scroll-mt-24 md:py-32">
       <SectionLabel>Contact</SectionLabel>
       <div className="pointer-events-none absolute -left-32 bottom-0 h-[500px] w-[500px] rounded-full bg-primary/10 blur-[140px]" />
 
