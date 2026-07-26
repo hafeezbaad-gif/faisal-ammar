@@ -54,6 +54,65 @@ function Reveal({
   );
 }
 
+// ---------- Smooth scroll + scrollspy ----------
+function scrollToHash(hash: string) {
+  const id = hash.replace(/^#/, "");
+  if (!id) return;
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.scrollIntoView({ behavior: "smooth", block: "start" });
+  history.replaceState(null, "", `#${id}`);
+}
+
+function useActiveSection(ids: string[]) {
+  const [active, setActive] = useState<string>(ids[0] ?? "");
+  useEffect(() => {
+    const els = ids
+      .map((id) => document.getElementById(id))
+      .filter((e): e is HTMLElement => !!e);
+    if (!els.length) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+        if (visible[0]) setActive(visible[0].target.id);
+      },
+      { rootMargin: "-40% 0px -50% 0px", threshold: [0, 0.25, 0.5, 0.75, 1] }
+    );
+    els.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, [ids.join(",")]);
+  return active;
+}
+
+function NavLink({
+  href,
+  onClick,
+  className,
+  children,
+}: {
+  href: string;
+  onClick?: () => void;
+  className?: string;
+  children: ReactNode;
+}) {
+  return (
+    <a
+      href={href}
+      onClick={(e) => {
+        if (href.startsWith("#")) {
+          e.preventDefault();
+          scrollToHash(href);
+        }
+        onClick?.();
+      }}
+      className={className}
+    >
+      {children}
+    </a>
+  );
+}
 
 export const Route = createFileRoute("/")({
   component: Landing,
@@ -69,7 +128,7 @@ const NAV = [
 
 function Landing() {
   return (
-    <div id="home" className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground">
       <Header />
       <main>
         <Hero />
@@ -117,6 +176,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const active = useActiveSection(NAV.map((n) => n.href.replace("#", "")));
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -141,36 +201,48 @@ function Header() {
           scrolled ? "h-14 md:h-16" : "h-16 md:h-20"
         }`}
       >
-        <a href="#home" className="font-display text-xl font-extrabold tracking-tight">
+        <NavLink href="#home" className="font-display text-xl font-extrabold tracking-tight">
           <span className="text-primary">FBA</span>
           <span className="text-foreground">withFaisal</span>
-        </a>
+        </NavLink>
 
         <nav className="hidden items-center gap-8 md:flex">
-          {NAV.map((n) => (
-            <a
-              key={n.href}
-              href={n.href}
-              className="story-link text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-            >
-              {n.label}
-            </a>
-          ))}
+          {NAV.map((n) => {
+            const isActive = active === n.href.replace("#", "");
+            return (
+              <NavLink
+                key={n.href}
+                href={n.href}
+                className={`relative text-sm font-medium transition-colors ${
+                  isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {n.label}
+                {isActive && (
+                  <motion.span
+                    layoutId="nav-active"
+                    className="absolute -bottom-1.5 left-0 right-0 h-0.5 rounded-full bg-primary"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
+              </NavLink>
+            );
+          })}
         </nav>
 
         <div className="flex items-center gap-3">
-          <a
+          <NavLink
             href="#contact"
             className="hidden text-xs font-semibold tracking-[0.2em] text-foreground/80 transition-colors hover:text-primary md:block"
           >
             LET'S TALK
-          </a>
+          </NavLink>
           <motion.button
             aria-label="Menu"
             onClick={() => setOpen((v) => !v)}
             whileHover={{ scale: 1.06 }}
             whileTap={{ scale: 0.92 }}
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-hairline bg-surface text-primary transition-colors hover:border-primary hover:shadow-[var(--shadow-glow-sm)]"
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-hairline bg-surface text-primary transition-colors hover:border-primary hover:shadow-[var(--shadow-glow-sm)] md:hidden"
           >
             <Menu size={18} />
           </motion.button>
@@ -179,23 +251,30 @@ function Header() {
       {open && (
         <div className="border-t border-hairline bg-background/95 backdrop-blur-xl md:hidden">
           <nav className="flex flex-col gap-1 px-6 py-4">
-            {NAV.map((n) => (
-              <a
-                key={n.href}
-                href={n.href}
-                onClick={() => setOpen(false)}
-                className="rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-surface hover:text-foreground"
-              >
-                {n.label}
-              </a>
-            ))}
-            <a
+            {NAV.map((n) => {
+              const isActive = active === n.href.replace("#", "");
+              return (
+                <NavLink
+                  key={n.href}
+                  href={n.href}
+                  onClick={() => setOpen(false)}
+                  className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                    isActive
+                      ? "bg-primary/10 text-primary"
+                      : "text-muted-foreground hover:bg-surface hover:text-foreground"
+                  }`}
+                >
+                  {n.label}
+                </NavLink>
+              );
+            })}
+            <NavLink
               href="#contact"
               onClick={() => setOpen(false)}
               className="mt-2 rounded-lg bg-primary px-3 py-2 text-center text-sm font-semibold text-primary-foreground"
             >
               Let's Talk
-            </a>
+            </NavLink>
           </nav>
         </div>
       )}
@@ -205,7 +284,7 @@ function Header() {
 
 function Hero() {
   return (
-    <section className="relative overflow-hidden pt-32 pb-24 md:pt-40 md:pb-32">
+    <section id="home" className="relative overflow-hidden pt-32 pb-24 scroll-mt-24 md:pt-40 md:pb-32">
       <div className="pointer-events-none absolute inset-0 vertical-lines opacity-60" />
       <motion.div
         aria-hidden
@@ -259,7 +338,7 @@ function Hero() {
           </motion.p>
           <motion.div variants={fadeUp} className="mt-8 flex flex-wrap items-center gap-3">
             <motion.a
-              href="#contact"
+              href="#contact" onClick={(e) => { e.preventDefault(); scrollToHash("#contact"); }}
               whileHover={{ y: -2 }}
               whileTap={{ scale: 0.95 }}
               className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-glow-sm)] transition-shadow hover:shadow-[var(--shadow-glow)]"
@@ -268,7 +347,7 @@ function Hero() {
               <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
             </motion.a>
             <motion.a
-              href="#contact"
+              href="#contact" onClick={(e) => { e.preventDefault(); scrollToHash("#contact"); }}
               whileHover={{ y: -2 }}
               whileTap={{ scale: 0.95 }}
               className="inline-flex items-center gap-2 rounded-full border border-hairline bg-surface/50 px-6 py-3.5 text-sm font-semibold text-foreground transition-colors hover:border-primary/50 hover:bg-surface"
@@ -357,7 +436,7 @@ function Metric({ value, label }: { value: string; label: string }) {
 
 function About() {
   return (
-    <section id="about" className="relative py-24 md:py-32">
+    <section id="about" className="relative py-24 scroll-mt-24 md:py-32">
       <SectionLabel>About</SectionLabel>
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-6 lg:grid-cols-2 lg:gap-16">
         <Reveal>
@@ -540,7 +619,7 @@ const SERVICES = [
 
 function Services() {
   return (
-    <section id="services" className="relative overflow-hidden py-24 md:py-32">
+    <section id="services" className="relative overflow-hidden py-24 scroll-mt-24 md:py-32">
       <SectionLabel>Services</SectionLabel>
       <div className="pointer-events-none absolute right-0 top-1/4 h-[400px] w-[400px] rounded-full bg-primary/10 blur-[120px]" />
 
@@ -649,7 +728,7 @@ const CASES = [
 
 function CaseStudy() {
   return (
-    <section id="case-study" className="relative py-24 md:py-32">
+    <section id="case-study" className="relative py-24 scroll-mt-24 md:py-32">
       <SectionLabel>Case Study</SectionLabel>
       <div className="mx-auto max-w-7xl px-6">
         <Reveal>
@@ -760,7 +839,7 @@ function Contact() {
   };
 
   return (
-    <section id="contact" className="relative overflow-hidden py-24 md:py-32">
+    <section id="contact" className="relative overflow-hidden py-24 scroll-mt-24 md:py-32">
       <SectionLabel>Contact</SectionLabel>
       <div className="pointer-events-none absolute -left-32 bottom-0 h-[500px] w-[500px] rounded-full bg-primary/10 blur-[140px]" />
 
@@ -904,15 +983,24 @@ function Field({
 function Footer() {
   return (
     <footer className="border-t border-hairline bg-background">
-      <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-6 py-8 md:flex-row">
+      <div className="mx-auto flex max-w-7xl flex-col items-center gap-6 px-6 py-10">
         <div className="font-display text-sm font-bold">
           <span className="text-primary">FBA</span>withFaisal
         </div>
-        <div className="text-xs text-muted-foreground">
-          © {new Date().getFullYear()} Faisal Abdul. All rights reserved.
-        </div>
-        <div className="text-xs text-muted-foreground">
-          Built for founders who ship.
+        <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+          {NAV.map((n) => (
+            <NavLink
+              key={n.href}
+              href={n.href}
+              className="text-xs font-medium text-muted-foreground transition-colors hover:text-primary"
+            >
+              {n.label}
+            </NavLink>
+          ))}
+        </nav>
+        <div className="flex w-full flex-col items-center justify-between gap-2 border-t border-hairline pt-6 text-xs text-muted-foreground md:flex-row">
+          <div>© {new Date().getFullYear()} Faisal Abdul. All rights reserved.</div>
+          <div>Built for founders who ship.</div>
         </div>
       </div>
     </footer>
