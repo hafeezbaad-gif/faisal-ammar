@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent, type ReactNode } from "react";
+import { motion, type Variants } from "framer-motion";
 import {
   ArrowRight,
   Menu,
@@ -17,6 +18,42 @@ import {
   Sparkles,
 } from "lucide-react";
 import portrait from "@/assets/faisal-portrait.jpg";
+
+// ---------- Motion helpers ----------
+const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
+};
+
+const container: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.09, delayChildren: 0.05 } },
+};
+
+function Reveal({
+  children,
+  className,
+  delay = 0,
+  y = 24,
+}: {
+  children: ReactNode;
+  className?: string;
+  delay?: number;
+  y?: number;
+}) {
+  return (
+    <motion.div
+      className={className}
+      initial={{ opacity: 0, y }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
 
 export const Route = createFileRoute("/")({
   component: Landing,
