@@ -126,14 +126,21 @@ function Header() {
   }, []);
 
   return (
-    <header
+    <motion.header
+      initial={{ y: -30, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "border-b border-hairline/60 bg-background/70 backdrop-blur-xl"
+          ? "border-b border-hairline/60 bg-background/70 backdrop-blur-md shadow-[0_8px_30px_-15px_rgba(0,0,0,0.15)]"
           : "border-b border-transparent"
       }`}
     >
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 md:h-20">
+      <div
+        className={`mx-auto flex max-w-7xl items-center justify-between px-6 transition-all duration-300 ${
+          scrolled ? "h-14 md:h-16" : "h-16 md:h-20"
+        }`}
+      >
         <a href="#home" className="font-display text-xl font-extrabold tracking-tight">
           <span className="text-primary">FBA</span>
           <span className="text-foreground">withFaisal</span>
@@ -144,7 +151,7 @@ function Header() {
             <a
               key={n.href}
               href={n.href}
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+              className="story-link text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
             >
               {n.label}
             </a>
@@ -158,13 +165,15 @@ function Header() {
           >
             LET'S TALK
           </a>
-          <button
+          <motion.button
             aria-label="Menu"
             onClick={() => setOpen((v) => !v)}
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-hairline bg-surface text-primary transition-all hover:border-primary hover:shadow-[var(--shadow-glow-sm)]"
+            whileHover={{ scale: 1.06 }}
+            whileTap={{ scale: 0.92 }}
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-hairline bg-surface text-primary transition-colors hover:border-primary hover:shadow-[var(--shadow-glow-sm)]"
           >
             <Menu size={18} />
-          </button>
+          </motion.button>
         </div>
       </div>
       {open && (
