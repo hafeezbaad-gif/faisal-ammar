@@ -652,29 +652,50 @@ function CaseStudy() {
     <section id="case-study" className="relative py-24 md:py-32">
       <SectionLabel>Case Study</SectionLabel>
       <div className="mx-auto max-w-7xl px-6">
-        <div className="max-w-2xl">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-primary">
-            Case Studies
-          </p>
-          <h2 className="mt-3 font-display text-4xl font-bold leading-tight md:text-5xl">
-            Real accounts. <span className="text-gradient-primary">Real receipts.</span>
-          </h2>
-        </div>
+        <Reveal>
+          <div className="max-w-2xl">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-primary">
+              Case Studies
+            </p>
+            <h2 className="mt-3 font-display text-4xl font-bold leading-tight md:text-5xl">
+              Real accounts. <span className="text-gradient-primary">Real receipts.</span>
+            </h2>
+          </div>
+        </Reveal>
 
-        <div className="mt-14 grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <motion.div
+          className="mt-14 grid grid-cols-1 gap-6 lg:grid-cols-2"
+          variants={container}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-80px" }}
+        >
           {CASES.map((c, i) => (
-            <article
+            <motion.article
               key={c.title}
-              className={`group relative overflow-hidden rounded-[32px] border border-hairline bg-surface/70 p-8 md:p-10 ${
+              variants={fadeUp}
+              whileHover={{ y: -6 }}
+              transition={{ type: "spring", stiffness: 260, damping: 22 }}
+              className={`group relative overflow-hidden rounded-[32px] border border-hairline bg-surface/70 p-8 md:p-10 hover:shadow-2xl ${
                 i === 0 ? "lg:mt-0" : "lg:mt-12"
               }`}
             >
               <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
               <div className="flex items-center justify-between">
-                <span className="rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-primary">
+                <motion.span
+                  className="relative overflow-hidden rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-primary"
+                  animate={{
+                    boxShadow: [
+                      "0 0 0 0 color-mix(in oklab, var(--primary) 30%, transparent)",
+                      "0 0 14px 2px color-mix(in oklab, var(--primary) 25%, transparent)",
+                      "0 0 0 0 color-mix(in oklab, var(--primary) 30%, transparent)",
+                    ],
+                  }}
+                  transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
+                >
                   {c.tag}
-                </span>
+                </motion.span>
                 <span className="text-xs text-muted-foreground">Case 0{i + 1}</span>
               </div>
 
@@ -709,9 +730,9 @@ function CaseStudy() {
                   </div>
                 ))}
               </div>
-            </article>
+            </motion.article>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
