@@ -176,6 +176,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const active = useActiveSection(NAV.map((n) => n.href.replace("#", "")));
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -200,36 +201,48 @@ function Header() {
           scrolled ? "h-14 md:h-16" : "h-16 md:h-20"
         }`}
       >
-        <a href="#home" className="font-display text-xl font-extrabold tracking-tight">
+        <NavLink href="#home" className="font-display text-xl font-extrabold tracking-tight">
           <span className="text-primary">FBA</span>
           <span className="text-foreground">withFaisal</span>
-        </a>
+        </NavLink>
 
         <nav className="hidden items-center gap-8 md:flex">
-          {NAV.map((n) => (
-            <a
-              key={n.href}
-              href={n.href}
-              className="story-link text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-            >
-              {n.label}
-            </a>
-          ))}
+          {NAV.map((n) => {
+            const isActive = active === n.href.replace("#", "");
+            return (
+              <NavLink
+                key={n.href}
+                href={n.href}
+                className={`relative text-sm font-medium transition-colors ${
+                  isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {n.label}
+                {isActive && (
+                  <motion.span
+                    layoutId="nav-active"
+                    className="absolute -bottom-1.5 left-0 right-0 h-0.5 rounded-full bg-primary"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
+              </NavLink>
+            );
+          })}
         </nav>
 
         <div className="flex items-center gap-3">
-          <a
+          <NavLink
             href="#contact"
             className="hidden text-xs font-semibold tracking-[0.2em] text-foreground/80 transition-colors hover:text-primary md:block"
           >
             LET'S TALK
-          </a>
+          </NavLink>
           <motion.button
             aria-label="Menu"
             onClick={() => setOpen((v) => !v)}
             whileHover={{ scale: 1.06 }}
             whileTap={{ scale: 0.92 }}
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-hairline bg-surface text-primary transition-colors hover:border-primary hover:shadow-[var(--shadow-glow-sm)]"
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-hairline bg-surface text-primary transition-colors hover:border-primary hover:shadow-[var(--shadow-glow-sm)] md:hidden"
           >
             <Menu size={18} />
           </motion.button>
@@ -238,23 +251,30 @@ function Header() {
       {open && (
         <div className="border-t border-hairline bg-background/95 backdrop-blur-xl md:hidden">
           <nav className="flex flex-col gap-1 px-6 py-4">
-            {NAV.map((n) => (
-              <a
-                key={n.href}
-                href={n.href}
-                onClick={() => setOpen(false)}
-                className="rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-surface hover:text-foreground"
-              >
-                {n.label}
-              </a>
-            ))}
-            <a
+            {NAV.map((n) => {
+              const isActive = active === n.href.replace("#", "");
+              return (
+                <NavLink
+                  key={n.href}
+                  href={n.href}
+                  onClick={() => setOpen(false)}
+                  className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                    isActive
+                      ? "bg-primary/10 text-primary"
+                      : "text-muted-foreground hover:bg-surface hover:text-foreground"
+                  }`}
+                >
+                  {n.label}
+                </NavLink>
+              );
+            })}
+            <NavLink
               href="#contact"
               onClick={() => setOpen(false)}
               className="mt-2 rounded-lg bg-primary px-3 py-2 text-center text-sm font-semibold text-primary-foreground"
             >
               Let's Talk
-            </a>
+            </NavLink>
           </nav>
         </div>
       )}
