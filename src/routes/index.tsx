@@ -199,7 +199,7 @@ function Header() {
           </nav>
         </div>
       )}
-    </header>
+    </motion.header>
   );
 }
 
