@@ -40,44 +40,47 @@
 
   --shadow-glow: 0 0 60px -10px color-mix(in oklab, var(--primary) 55%, transparent);
   --shadow-glow-sm: 0 0 24px -6px color-mix(in oklab, var(--primary) 45%, transparent);
-  --gradient-primary: linear-gradient(135deg, oklch(0.72 0.18 300), oklch(0.68 0.2 285));
+  --gradient-primary: linear-gradient(135deg, #C46D29, #E3A362);
   --gradient-radial-primary: radial-gradient(circle at center, color-mix(in oklab, var(--primary) 55%, transparent), transparent 70%);
 }
 
 :root {
   --radius: 0.875rem;
 
-  /* Light palette — deeper tones for stronger text contrast */
-  --background: oklch(0.92 0.012 90);
-  --foreground: oklch(0.18 0.02 285);
-  --surface: oklch(0.88 0.014 90);
-  --surface-elevated: oklch(0.95 0.01 90);
-  --hairline: oklch(0.78 0.015 285);
+  /* Warm earthy palette — Cream background, Forest Green text */
+  --background: oklch(0.972 0.032 95);
+  --foreground: oklch(0.29 0.05 130);
+  --surface: oklch(0.94 0.035 95);
+  --surface-elevated: oklch(0.985 0.028 95);
+  --hairline: oklch(0.62 0.06 115);
 
-  --card: oklch(0.94 0.01 90);
-  --card-foreground: oklch(0.18 0.02 285);
-  --popover: oklch(0.94 0.01 90);
-  --popover-foreground: oklch(0.18 0.02 285);
+  --card: oklch(0.955 0.03 95);
+  --card-foreground: oklch(0.29 0.05 130);
+  --popover: oklch(0.955 0.03 95);
+  --popover-foreground: oklch(0.29 0.05 130);
 
-  --primary: oklch(0.48 0.22 300);
-  --primary-foreground: oklch(0.99 0.003 285);
+  /* Primary — Burnt Rust #C46D29 (CTAs) */
+  --primary: oklch(0.6 0.14 55);
+  --primary-foreground: oklch(0.972 0.032 95);
 
-  --secondary: oklch(0.84 0.014 285);
-  --secondary-foreground: oklch(0.2 0.02 285);
+  /* Secondary — Olive Green #5C6B3A */
+  --secondary: oklch(0.5 0.07 118);
+  --secondary-foreground: oklch(0.972 0.032 95);
 
-  --muted: oklch(0.86 0.012 285);
-  --muted-foreground: oklch(0.4 0.018 285);
+  --muted: oklch(0.9 0.03 95);
+  --muted-foreground: oklch(0.4 0.05 125);
 
-  --accent: oklch(0.48 0.22 300);
-  --accent-foreground: oklch(0.99 0.003 285);
+  /* Accent — Sand #E3A362 */
+  --accent: oklch(0.75 0.12 60);
+  --accent-foreground: oklch(0.29 0.05 130);
 
   --destructive: oklch(0.55 0.22 25);
-  --destructive-foreground: oklch(0.99 0.003 285);
+  --destructive-foreground: oklch(0.972 0.032 95);
 
-  --border: oklch(0.78 0.015 285);
-  --input: oklch(0.82 0.014 285);
+  --border: oklch(0.72 0.05 115);
+  --input: oklch(0.85 0.04 100);
 
-  --ring: oklch(0.55 0.2 300);
+  --ring: oklch(0.6 0.14 55);
 }
 
 @layer base {
