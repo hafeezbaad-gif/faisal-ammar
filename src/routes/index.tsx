@@ -834,15 +834,17 @@ function Contact() {
               className="mt-2 w-full resize-none rounded-2xl border border-hairline bg-background/60 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
             />
           </div>
-          <button
+          <motion.button
             type="submit"
-            className="group mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-4 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-glow-sm)] transition-all hover:shadow-[var(--shadow-glow)]"
+            whileHover={{ y: -2 }}
+            whileTap={{ scale: 0.96 }}
+            className="group mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-4 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-glow-sm)] transition-shadow hover:shadow-[var(--shadow-glow)]"
           >
             {sent ? "Thanks — I'll be in touch shortly ✓" : "Get My Free Growth Plan"}
             {!sent && (
               <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
             )}
-          </button>
+          </motion.button>
         </form>
       </div>
     </section>
