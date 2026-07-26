@@ -360,7 +360,7 @@ function About() {
     <section id="about" className="relative py-24 md:py-32">
       <SectionLabel>About</SectionLabel>
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-6 lg:grid-cols-2 lg:gap-16">
-        <div>
+        <Reveal>
           <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-primary">
             What I Do
           </p>
@@ -385,8 +385,7 @@ function About() {
               help businesses grow faster and more profitably.
             </p>
           </div>
-
-        </div>
+        </Reveal>
 
         <div>
           <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-primary">
