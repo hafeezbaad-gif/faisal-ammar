@@ -284,7 +284,7 @@ function Header() {
 
 function Hero() {
   return (
-    <section className="relative overflow-hidden pt-32 pb-24 md:pt-40 md:pb-32">
+    <section id="home" className="relative overflow-hidden pt-32 pb-24 scroll-mt-24 md:pt-40 md:pb-32">
       <div className="pointer-events-none absolute inset-0 vertical-lines opacity-60" />
       <motion.div
         aria-hidden
