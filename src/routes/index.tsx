@@ -62,7 +62,21 @@ function scrollToHash(hash: string) {
   if (!id) return;
   const el = document.getElementById(id);
   if (!el) return;
-  el.scrollIntoView({ behavior: "smooth", block: "start" });
+  const headerOffset = 96;
+  const startY = window.scrollY;
+  const targetY = el.getBoundingClientRect().top + startY - headerOffset;
+  const distance = targetY - startY;
+  const duration = Math.min(1800, Math.max(900, Math.abs(distance) * 0.9));
+  const startTime = performance.now();
+  const easeInOutCubic = (t: number) =>
+    t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  const step = (now: number) => {
+    const elapsed = now - startTime;
+    const progress = Math.min(1, elapsed / duration);
+    window.scrollTo(0, startY + distance * easeInOutCubic(progress));
+    if (progress < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
   history.replaceState(null, "", `#${id}`);
 }
 
