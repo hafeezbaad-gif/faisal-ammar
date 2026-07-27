@@ -40,47 +40,47 @@
 
   --shadow-glow: 0 0 60px -10px color-mix(in oklab, var(--primary) 55%, transparent);
   --shadow-glow-sm: 0 0 24px -6px color-mix(in oklab, var(--primary) 45%, transparent);
-  --gradient-primary: linear-gradient(135deg, #C46D29, #E3A362);
+  --gradient-primary: linear-gradient(135deg, #FCA311, #FFB947);
   --gradient-radial-primary: radial-gradient(circle at center, color-mix(in oklab, var(--primary) 55%, transparent), transparent 70%);
 }
 
 :root {
   --radius: 0.875rem;
 
-  /* Warm earthy palette — Cream background, Forest Green text */
-  --background: oklch(0.972 0.032 95);
-  --foreground: oklch(0.29 0.05 130);
-  --surface: oklch(0.94 0.035 95);
-  --surface-elevated: oklch(0.985 0.028 95);
-  --hairline: oklch(0.62 0.06 115);
+  /* Premium dark palette — Black bg, Navy surfaces, Amber accents */
+  --background: #000000;
+  --foreground: #FFFFFF;
+  --surface: #14213D;
+  --surface-elevated: #1B2A4E;
+  --hairline: #263A66;
 
-  --card: oklch(0.955 0.03 95);
-  --card-foreground: oklch(0.29 0.05 130);
-  --popover: oklch(0.955 0.03 95);
-  --popover-foreground: oklch(0.29 0.05 130);
+  --card: #14213D;
+  --card-foreground: #FFFFFF;
+  --popover: #14213D;
+  --popover-foreground: #FFFFFF;
 
-  /* Primary — Burnt Rust #C46D29 (CTAs) */
-  --primary: oklch(0.6 0.14 55);
-  --primary-foreground: oklch(0.972 0.032 95);
+  /* Primary — Amber #FCA311 */
+  --primary: #FCA311;
+  --primary-foreground: #000000;
 
-  /* Secondary — Olive Green #5C6B3A */
-  --secondary: oklch(0.5 0.07 118);
-  --secondary-foreground: oklch(0.972 0.032 95);
+  /* Secondary — Navy */
+  --secondary: #1B2A4E;
+  --secondary-foreground: #FFFFFF;
 
-  --muted: oklch(0.9 0.03 95);
-  --muted-foreground: oklch(0.4 0.05 125);
+  --muted: #14213D;
+  --muted-foreground: #E5E5E5;
 
-  /* Accent — Sand #E3A362 */
-  --accent: oklch(0.75 0.12 60);
-  --accent-foreground: oklch(0.29 0.05 130);
+  /* Accent — Amber */
+  --accent: #FCA311;
+  --accent-foreground: #000000;
 
-  --destructive: oklch(0.55 0.22 25);
-  --destructive-foreground: oklch(0.972 0.032 95);
+  --destructive: oklch(0.62 0.22 25);
+  --destructive-foreground: #FFFFFF;
 
-  --border: oklch(0.72 0.05 115);
-  --input: oklch(0.85 0.04 100);
+  --border: #263A66;
+  --input: #1B2A4E;
 
-  --ring: oklch(0.6 0.14 55);
+  --ring: #FCA311;
 }
 
 @layer base {
@@ -90,8 +90,9 @@
 
   html {
     background-color: var(--color-background);
-    color-scheme: light;
+    color-scheme: dark;
   }
+
 
 
   body {
