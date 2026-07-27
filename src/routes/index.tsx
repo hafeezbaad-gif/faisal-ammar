@@ -16,7 +16,9 @@ import {
   Quote,
   TrendingUp,
   Sparkles,
+  Loader2,
 } from "lucide-react";
+import { toast } from "sonner";
 import portrait from "@/assets/faisal-portrait.jpg";
 
 // ---------- Motion helpers ----------
