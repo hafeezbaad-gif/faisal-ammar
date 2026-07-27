@@ -1050,7 +1050,7 @@ function Footer() {
           ))}
         </nav>
         <div className="flex w-full flex-col items-center justify-between gap-2 border-t border-hairline pt-6 text-xs text-muted-foreground md:flex-row">
-          <div>© {new Date().getFullYear()} Faisal Abdul. All rights reserved.</div>
+          <div>© {new Date().getFullYear()} Faisal. All rights reserved.</div>
           <div>Built for founders who ship.</div>
         </div>
       </div>
