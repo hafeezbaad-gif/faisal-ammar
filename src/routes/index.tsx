@@ -16,7 +16,9 @@ import {
   Quote,
   TrendingUp,
   Sparkles,
+  Loader2,
 } from "lucide-react";
+import { toast } from "sonner";
 import portrait from "@/assets/faisal-portrait.jpg";
 
 // ---------- Motion helpers ----------
@@ -829,13 +831,31 @@ function Block({ label, value }: { label: string; value: string }) {
 }
 
 function Contact() {
-  const [sent, setSent] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSent(true);
-    setTimeout(() => setSent(false), 3500);
-    (e.currentTarget as HTMLFormElement).reset();
+    const form = e.currentTarget;
+    const data = new FormData(form);
+    setLoading(true);
+    try {
+      const res = await fetch("https://formspree.io/f/xojgpoqk", {
+        method: "POST",
+        body: data,
+        headers: { Accept: "application/json" },
+      });
+      if (res.ok) {
+        toast.success("Thank you! Your message has been sent successfully.");
+        form.reset();
+      } else {
+        const json = await res.json().catch(() => ({}));
+        toast.error(json?.errors?.[0]?.message || "Something went wrong. Please try again.");
+      }
+    } catch {
+      toast.error("Network error. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -888,19 +908,22 @@ function Contact() {
         </div>
 
         <form
+          action="https://formspree.io/f/xojgpoqk"
+          method="POST"
           onSubmit={onSubmit}
           className="rounded-[32px] border border-hairline bg-surface/80 p-8 backdrop-blur md:p-10"
         >
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-            <Field label="Full Name" name="name" placeholder="Faisal Abdul" />
+            <Field label="Full Name" name="name" placeholder="Your name" required />
             <Field
               label="Email Address"
               name="email"
               type="email"
-              placeholder="contact@fbawithfaisal.com"
+              placeholder="you@example.com"
+              required
             />
             <Field label="Phone Number" name="phone" placeholder="+92 346 5767577" />
-            <Field label="Website Link" name="website" placeholder="www.fbawithfaisal.com" />
+            <Field label="Subject" name="subject" placeholder="How can I help?" />
           </div>
           <div className="mt-5">
             <label className="text-[10px] font-semibold uppercase tracking-[0.25em] text-muted-foreground">
@@ -909,19 +932,28 @@ function Contact() {
             <textarea
               name="message"
               rows={5}
+              required
               placeholder="Write message"
               className="mt-2 w-full resize-none rounded-2xl border border-hairline bg-background/60 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
             />
           </div>
           <motion.button
             type="submit"
-            whileHover={{ y: -2 }}
-            whileTap={{ scale: 0.96 }}
-            className="group mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-4 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-glow-sm)] transition-shadow hover:shadow-[var(--shadow-glow)]"
+            disabled={loading}
+            whileHover={{ y: loading ? 0 : -2 }}
+            whileTap={{ scale: loading ? 1 : 0.96 }}
+            className="group mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-4 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-glow-sm)] transition-shadow hover:shadow-[var(--shadow-glow)] disabled:opacity-70"
           >
-            {sent ? "Thanks — I'll be in touch shortly ✓" : "Get My Free Growth Plan"}
-            {!sent && (
-              <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+            {loading ? (
+              <>
+                <Loader2 size={16} className="animate-spin" />
+                Sending…
+              </>
+            ) : (
+              <>
+                Get My Free Growth Plan
+                <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+              </>
             )}
           </motion.button>
         </form>
@@ -959,11 +991,13 @@ function Field({
   name,
   placeholder,
   type = "text",
+  required = false,
 }: {
   label: string;
   name: string;
   placeholder: string;
   type?: string;
+  required?: boolean;
 }) {
   return (
     <div>
@@ -973,6 +1007,7 @@ function Field({
       <input
         name={name}
         type={type}
+        required={required}
         placeholder={placeholder}
         className="mt-2 w-full rounded-2xl border border-hairline bg-background/60 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
       />
