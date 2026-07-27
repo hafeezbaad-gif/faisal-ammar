@@ -827,6 +827,17 @@ function CaseStudy() {
                   </div>
                 ))}
               </div>
+
+              <div className="mt-8">
+                <Link
+                  to="/case-study/$id"
+                  params={{ id: `0${i + 1}` }}
+                  className="group/btn inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-5 py-2.5 text-sm font-semibold text-primary transition hover:bg-primary hover:text-primary-foreground hover:shadow-glow-sm"
+                >
+                  Learn more
+                  <ArrowRight className="h-4 w-4 transition group-hover/btn:translate-x-0.5" />
+                </Link>
+              </div>
             </motion.article>
           ))}
         </motion.div>
