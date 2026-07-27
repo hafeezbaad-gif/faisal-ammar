@@ -991,11 +991,13 @@ function Field({
   name,
   placeholder,
   type = "text",
+  required = false,
 }: {
   label: string;
   name: string;
   placeholder: string;
   type?: string;
+  required?: boolean;
 }) {
   return (
     <div>
@@ -1005,6 +1007,7 @@ function Field({
       <input
         name={name}
         type={type}
+        required={required}
         placeholder={placeholder}
         className="mt-2 w-full rounded-2xl border border-hairline bg-background/60 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
       />
