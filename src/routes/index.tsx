@@ -807,11 +807,13 @@ function CaseStudy() {
                 <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-primary">
                   Result
                 </p>
-                <div className="mt-2 flex items-baseline gap-3">
+                <div className="mt-2 flex flex-wrap items-center gap-2">
                   <div className="font-display text-4xl font-extrabold text-foreground">
                     {c.result}
                   </div>
-                  <div className="text-sm text-muted-foreground">{c.resultSub}</div>
+                  <div className="text-[10px] font-medium leading-none text-muted-foreground">
+                    {c.resultSub}
+                  </div>
                 </div>
               </div>
 
