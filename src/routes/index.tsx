@@ -916,7 +916,9 @@ function Contact() {
             <div className="h-px flex-1 bg-hairline" />
             <a
               aria-label="LinkedIn"
-              href="#"
+              href="https://www.linkedin.com/in/faisal-ammar-ppc-expert?utm_source=share_via&utm_content=profile&utm_medium=member_android"
+              target="_blank"
+              rel="noopener noreferrer"
               className="flex h-10 w-10 items-center justify-center rounded-full border border-hairline bg-surface text-foreground/80 transition-all hover:border-primary hover:text-primary"
             >
               <Linkedin size={16} />
