@@ -8,7 +8,7 @@ import {
   Mail,
   Phone,
   Linkedin,
-  Instagram,
+  MessageCircle,
   Target,
   BarChart3,
   FileText,
@@ -647,11 +647,8 @@ function Services() {
                 Services
               </p>
               <h2 className="mt-3 font-display text-4xl font-bold leading-tight md:text-5xl">
-                My Special Service&nbsp;
-                <br />
-                For Your&nbsp;
-                <br />
-                <span className="text-gradient-primary">Business Development</span>
+                Helping Brands Stand Out &amp;{" "}
+                <span className="text-gradient-primary">Scale</span>
               </h2>
             </div>
           </div>
@@ -925,11 +922,13 @@ function Contact() {
               <Linkedin size={16} />
             </a>
             <a
-              aria-label="Instagram"
-              href="#"
+              aria-label="WhatsApp"
+              href="https://wa.me/message/LRNRODZZFXCFD1"
+              target="_blank"
+              rel="noopener noreferrer"
               className="flex h-10 w-10 items-center justify-center rounded-full border border-hairline bg-surface text-foreground/80 transition-all hover:border-primary hover:text-primary"
             >
-              <Instagram size={16} />
+              <MessageCircle size={16} />
             </a>
           </div>
         </div>
