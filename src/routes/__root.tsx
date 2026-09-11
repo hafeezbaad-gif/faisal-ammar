@@ -78,14 +78,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "FBAwithFaisal — Amazon FBA Expert & Growth Strategist" },
+      { title: "EcommercewithFaisal — Expert & Growth Strategist" },
       {
         name: "description",
         content:
           "Faisal  helps e-commerce brands scale Amazon storefronts to $50K–$300K+/month with precision PPC, listing architecture, and supply chain strategy.",
       },
       { name: "author", content: "Faisal Abdul" },
-      { property: "og:title", content: "FBAwithFaisal — Amazon FBA Expert & Growth Strategist" },
+      { property: "og:title", content: "EcommercewithFaisal — Ecommerce Expert & Growth Strategist" },
       {
         property: "og:description",
         content:
@@ -93,7 +93,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "FBAwithFaisal — Amazon FBA Expert & Growth Strategist" },
+      { name: "twitter:title", content: "EcommercewithFaisal — Ecommerce Expert & Growth Strategist" },
       { name: "twitter:description", content: "Faisal  helps e-commerce brands scale Amazon storefronts to $50K–$300K+/month with precision PPC, listing architecture, and supply chain strategy." },
       { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/gm8FIh4ueiXEknuMNcxksFnxalA3/social-images/social-1783530470390-ChatGPT_Image_Jul_8,_2026,_08_22_00_PM.webp" },
       { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/gm8FIh4ueiXEknuMNcxksFnxalA3/social-images/social-1783530470390-ChatGPT_Image_Jul_8,_2026,_08_22_00_PM.webp" },
