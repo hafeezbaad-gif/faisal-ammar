@@ -340,7 +340,7 @@ function Hero() {
           >
             Syed M. Faisal Ammar
             <br />
-            <span className="text-gradient-primary">Amazon FBA Expert</span>
+            <span className="text-gradient-primary">Ecommerce Expert</span>
           </motion.h1>
           <motion.p
             variants={fadeUp}
@@ -392,7 +392,7 @@ function Hero() {
             <div className="absolute inset-x-2 bottom-0 top-16 overflow-hidden rounded-t-[220px] border border-hairline bg-surface">
               <img
                 src={portrait}
-                alt="Faisal Abdul, Amazon FBA expert"
+                alt="Faisal Abdul,  Ecommerce expert"
                 width={912}
                 height={1104}
                 className="h-full w-full object-cover object-top"
