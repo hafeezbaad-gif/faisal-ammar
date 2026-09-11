@@ -217,7 +217,7 @@ function Header() {
         }`}
       >
         <NavLink href="#home" className="font-display text-xl font-extrabold tracking-tight">
-          <span className="text-primary">FBA</span>
+          <span className="text-primary">Ecomm</span>
           <span className="text-foreground">withFaisal</span>
         </NavLink>
 
