@@ -622,7 +622,7 @@ const SERVICES = [
     bullets: [
       "Amazon Account Setup",
       "Listing Setup",
-      "FBA Management",
+      "Campaign Management",
       "Daily Account Monitoring",
       "Advertising & Promotion",
       "Account Health Support",
@@ -1055,7 +1055,7 @@ function Footer() {
     <footer className="border-t border-hairline bg-background">
       <div className="mx-auto flex max-w-7xl flex-col items-center gap-6 px-6 py-10">
         <div className="font-display text-sm font-bold">
-          <span className="text-primary">FBA</span>withFaisal
+          <span className="text-primary">Ecommerce</span>withFaisal
         </div>
         <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
           {NAV.map((n) => (
