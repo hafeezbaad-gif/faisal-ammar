@@ -225,10 +225,13 @@ function Header() {
           scrolled ? "h-14 md:h-16" : "h-16 md:h-20"
         }`}
       >
-        <NavLink href="#home" className="font-display text-xl font-extrabold tracking-tight">
-          <span className="text-primary">Ecom</span>
-          <span className="text-foreground">withFaisal</span>
-        </NavLink>
+        <NavLink href="#home" className="flex items-center">
+  <img 
+    src="/logo.png" 
+    alt="Ecom with Faisal" 
+    className="h-9 md:h-11 w-auto object-contain" 
+  />
+</NavLink>
 
         <nav className="hidden items-center gap-8 md:flex">
           {NAV.map((n) => {
