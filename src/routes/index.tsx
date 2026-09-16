@@ -18,6 +18,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 import portrait from "@/assets/faisal-portrait.jpg";
 
 // ---------- Motion helpers ----------
@@ -141,12 +142,20 @@ const NAV = [
   { label: "Contact", href: "#contact" },
 ];
 
+const MARQUEE_ITEMS = [
+  { metric: "$10M+", label: "Verified Ecommerce Revenue" },
+  { metric: "Prime", label: "Eligible Fast Delivery" },
+  { metric: "100K+", label: "Units Shipped Worldwide" },
+  { metric: "100%", label: "Satisfaction Guaranteed" },
+];
+
 function Landing() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Header />
       <main>
         <Hero />
+        <Marquee />
         <About />
         <Services />
         <CaseStudy />
@@ -217,7 +226,7 @@ function Header() {
         }`}
       >
         <NavLink href="#home" className="font-display text-xl font-extrabold tracking-tight">
-          <span className="text-primary">Ecomm</span>
+          <span className="text-primary">Ecom</span>
           <span className="text-foreground">withFaisal</span>
         </NavLink>
 
@@ -392,7 +401,7 @@ function Hero() {
             <div className="absolute inset-x-2 bottom-0 top-16 overflow-hidden rounded-t-[220px] border border-hairline bg-surface">
               <img
                 src={portrait}
-                alt="Faisal Abdul,  Ecommerce expert"
+                alt="Faisal Abdul, Amazon Ecommerce expert"
                 width={912}
                 height={1104}
                 className="h-full w-full object-cover object-top"
@@ -446,6 +455,36 @@ function Metric({ value, label }: { value: string; label: string }) {
       </div>
       <div className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">{label}</div>
     </div>
+  );
+}
+
+function Marquee() {
+  const items = MARQUEE_ITEMS.map((item, i) => (
+    <div key={i} className="flex shrink-0 items-center gap-10 md:gap-12">
+      <div className="flex items-center gap-2.5 whitespace-nowrap md:gap-3">
+        <span className="font-display text-2xl font-extrabold tracking-tight text-primary md:text-3xl">
+          {item.metric}
+        </span>
+        <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground md:text-sm">
+          {item.label}
+        </span>
+      </div>
+      <span
+        className="h-2 w-2 shrink-0 rotate-45 bg-primary/70"
+        aria-hidden="true"
+      />
+    </div>
+  ));
+
+  return (
+    <section className="relative overflow-hidden border-y border-hairline bg-background py-4 md:py-5">
+      <div className="relative flex overflow-hidden">
+        <div className="marquee-track items-center gap-10 pr-10 md:gap-12 md:pr-12">
+          {items}
+          {items}
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -696,6 +735,14 @@ function Services() {
                     </li>
                   ))}
                 </ul>
+                <a
+                  href="https://wa.me/923467558646"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-4 inline-flex items-center gap-1 self-start text-sm font-medium text-primary transition hover:text-primary/80"
+                >
+                  Talk to an Expert <span aria-hidden="true">→</span>
+                </a>
               </div>
             </motion.div>
           ))}
@@ -862,6 +909,20 @@ function Contact() {
     const data = new FormData(form);
     setLoading(true);
     try {
+      // Save a copy of the submission to the admin panel database (non-blocking)
+      void supabase
+        .from("contact_submissions")
+        .insert({
+          name: String(data.get("name") ?? ""),
+          email: String(data.get("email") ?? ""),
+          phone: (data.get("phone") ? String(data.get("phone")) : null) as string | null,
+          subject: (data.get("subject") ? String(data.get("subject")) : null) as string | null,
+          message: String(data.get("message") ?? ""),
+        })
+        .then(({ error }) => {
+          if (error) console.error("[contact] save failed", error.message);
+        });
+
       const res = await fetch("https://formspree.io/f/xojgpoqk", {
         method: "POST",
         body: data,
