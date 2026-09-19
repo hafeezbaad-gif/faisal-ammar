@@ -74,11 +74,45 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 }
 
 function FloatingWhatsApp() {
+  const handleWhatsAppClick = () => {
+    // Generate a unique event ID for deduplication between Pixel and CAPI
+    const eventId = `contact_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+
+    // 1. Fire browser Pixel
+    if (typeof window !== "undefined" && (window as any).fbq) {
+      (window as any).fbq(
+        "track",
+        "Contact",
+        { content_name: "WhatsApp Consultation" },
+        { eventID: eventId }
+      );
+    }
+
+    // 2. Fire server CAPI via Cloudflare Worker
+    try {
+      fetch("https://meta-capi.hafeezbaad.workers.dev", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          eventName: "Contact",
+          eventId: eventId,
+          eventSourceUrl: typeof window !== "undefined" ? window.location.href : "",
+          customData: {
+            content_name: "WhatsApp Consultation",
+          },
+        }),
+      });
+    } catch (err) {
+      console.error("CAPI dispatch failed:", err);
+    }
+  };
+
   return (
     <a
       href="https://wa.me/923467558646"
       target="_blank"
       rel="noopener noreferrer"
+      onClick={handleWhatsAppClick}
       aria-label="Chat on WhatsApp"
       className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg shadow-black/30 transition-transform duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[#25D366] focus:ring-offset-2 focus:ring-offset-background"
     >
