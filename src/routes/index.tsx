@@ -21,6 +21,15 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import portrait from "@/assets/faisal-portrait.jpg";
 
+// Helper function to hash personal data with SHA-256 for Meta Conversions API
+async function sha256(value: string): Promise<string> {
+  const clean = value.trim().toLowerCase();
+  const msgBuffer = new TextEncoder().encode(clean);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", msgBuffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
 // ---------- Motion helpers ----------
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 24 },
@@ -196,7 +205,6 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   );
 }
 
-
 function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -226,12 +234,12 @@ function Header() {
         }`}
       >
         <NavLink href="#home" className="flex items-center">
-  <img 
-    src="/logo.png" 
-    alt="Ecom with Faisal" 
-    className="h-9 md:h-11 w-auto object-contain" 
-  />
-</NavLink>
+          <img
+            src="/logo.png"
+            alt="Ecom with Faisal"
+            className="h-9 md:h-11 w-auto object-contain"
+          />
+        </NavLink>
 
         <nav className="hidden items-center gap-8 md:flex">
           {NAV.map((n) => {
@@ -365,7 +373,11 @@ function Hero() {
           </motion.p>
           <motion.div variants={fadeUp} className="mt-8 flex flex-wrap items-center gap-3">
             <motion.a
-              href="#contact" onClick={(e) => { e.preventDefault(); scrollToHash("#contact"); }}
+              href="#contact"
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToHash("#contact");
+              }}
               whileHover={{ y: -2 }}
               whileTap={{ scale: 0.95 }}
               className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-glow-sm)] transition-shadow hover:shadow-[var(--shadow-glow)]"
@@ -374,7 +386,11 @@ function Hero() {
               <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
             </motion.a>
             <motion.a
-              href="#contact" onClick={(e) => { e.preventDefault(); scrollToHash("#contact"); }}
+              href="#contact"
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToHash("#contact");
+              }}
               whileHover={{ y: -2 }}
               whileTap={{ scale: 0.95 }}
               className="inline-flex items-center gap-2 rounded-full border border-hairline bg-surface/50 px-6 py-3.5 text-sm font-semibold text-foreground transition-colors hover:border-primary/50 hover:bg-surface"
@@ -911,16 +927,77 @@ function Contact() {
     const form = e.currentTarget;
     const data = new FormData(form);
     setLoading(true);
+
+    const rawName = String(data.get("name") ?? "").trim();
+    const rawEmail = String(data.get("email") ?? "").trim();
+    const rawPhone = String(data.get("phone") ?? "").trim();
+    const rawSubject = (data.get("subject") ? String(data.get("subject")) : null) as string | null;
+    const rawMessage = String(data.get("message") ?? "").trim();
+
+    // 1. Unique deduplication event ID
+    const eventId = `lead_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+
+    // 2. Fire Meta Browser Pixel
+    if (typeof window !== "undefined" && (window as any).fbq) {
+      (window as any).fbq(
+        "track",
+        "Lead",
+        {
+          content_name: "Contact Form Submission",
+          content_category: rawSubject || "Growth Plan Inquiry",
+        },
+        { eventID: eventId }
+      );
+    }
+
+    // 3. Format customer fields according to Meta CAPI requirements
+    const nameParts = rawName.split(/\s+/);
+    const firstName = nameParts[0] || "";
+    const lastName = nameParts.length > 1 ? nameParts.slice(1).join(" ") : undefined;
+
+    // Remove non-numeric characters except leading plus
+    const formattedPhone = rawPhone.replace(/[^0-9+]/g, "");
+
+    // 4. Hash user details and fire CAPI via Cloudflare Worker
     try {
-      // Save a copy of the submission to the admin panel database (non-blocking)
+      const hashedEmail = rawEmail ? await sha256(rawEmail) : undefined;
+      const hashedPhone = formattedPhone ? await sha256(formattedPhone) : undefined;
+      const hashedFirstName = firstName ? await sha256(firstName) : undefined;
+      const hashedLastName = lastName ? await sha256(lastName) : undefined;
+
+      fetch("https://meta-capi.hafeezbaad.workers.dev", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          eventName: "Lead",
+          eventId: eventId,
+          eventSourceUrl: typeof window !== "undefined" ? window.location.href : "",
+          userData: {
+            em: hashedEmail ? [hashedEmail] : undefined,
+            ph: hashedPhone ? [hashedPhone] : undefined,
+            fn: hashedFirstName ? [hashedFirstName] : undefined,
+            ln: hashedLastName ? [hashedLastName] : undefined,
+          },
+          customData: {
+            content_name: "Contact Form Submission",
+            content_category: rawSubject || "Growth Plan Inquiry",
+          },
+        }),
+      });
+    } catch (err) {
+      console.error("CAPI Lead dispatch failed:", err);
+    }
+
+    // 5. Send data to Supabase and Formspree
+    try {
       void supabase
         .from("contact_submissions")
         .insert({
-          name: String(data.get("name") ?? ""),
-          email: String(data.get("email") ?? ""),
-          phone: (data.get("phone") ? String(data.get("phone")) : null) as string | null,
-          subject: (data.get("subject") ? String(data.get("subject")) : null) as string | null,
-          message: String(data.get("message") ?? ""),
+          name: rawName,
+          email: rawEmail,
+          phone: formattedPhone || null,
+          subject: rawSubject,
+          message: rawMessage,
         })
         .then(({ error }) => {
           if (error) console.error("[contact] save failed", error.message);
@@ -931,6 +1008,7 @@ function Contact() {
         body: data,
         headers: { Accept: "application/json" },
       });
+
       if (res.ok) {
         toast.success("Thank you! Your message has been sent successfully.");
         form.reset();
