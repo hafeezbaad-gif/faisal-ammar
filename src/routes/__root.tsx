@@ -6,12 +6,50 @@ import {
   useRouter,
   HeadContent,
   Scripts,
+  useRouterState,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
+
+const PIXEL_ID = "2284927479021798";
+const CAPI_ENDPOINT = "https://meta-capi.hafeezbaad.workers.dev";
+
+// Global declaration for Meta Pixel fbq
+declare global {
+  interface Window {
+    fbq?: (...args: unknown[]) => void;
+    _fbq?: unknown;
+  }
+}
+
+// Client helper for dual Pixel + CAPI tracking
+function sendTrackingEvent(eventName: string, customData: Record<string, unknown> = {}) {
+  const eventId = `${eventName.toLowerCase()}_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+
+  // 1. Browser Meta Pixel
+  if (typeof window !== "undefined" && window.fbq) {
+    window.fbq("track", eventName, customData, { eventID: eventId });
+  }
+
+  // 2. Server CAPI via Cloudflare Worker
+  try {
+    fetch(CAPI_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        eventName,
+        eventId,
+        eventSourceUrl: typeof window !== "undefined" ? window.location.href : "",
+        customData,
+      }),
+    }).catch((err) => console.error("CAPI fetch error:", err));
+  } catch (err) {
+    console.error("CAPI dispatch failed:", err);
+  }
+}
 
 function NotFoundComponent() {
   return (
@@ -75,36 +113,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 
 function FloatingWhatsApp() {
   const handleWhatsAppClick = () => {
-    // Generate a unique event ID for deduplication between Pixel and CAPI
-    const eventId = `contact_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
-
-    // 1. Fire browser Pixel
-    if (typeof window !== "undefined" && (window as any).fbq) {
-      (window as any).fbq(
-        "track",
-        "Contact",
-        { content_name: "WhatsApp Consultation" },
-        { eventID: eventId }
-      );
-    }
-
-    // 2. Fire server CAPI via Cloudflare Worker
-    try {
-      fetch("https://meta-capi.hafeezbaad.workers.dev", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          eventName: "Contact",
-          eventId: eventId,
-          eventSourceUrl: typeof window !== "undefined" ? window.location.href : "",
-          customData: {
-            content_name: "WhatsApp Consultation",
-          },
-        }),
-      });
-    } catch (err) {
-      console.error("CAPI dispatch failed:", err);
-    }
+    sendTrackingEvent("Contact", { content_name: "WhatsApp Consultation" });
   };
 
   return (
@@ -138,14 +147,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "Faisal  helps e-commerce brands scale Amazon storefronts to $50K–$300K+/month with precision PPC, listing architecture, and supply chain strategy.",
+          "Faisal helps e-commerce brands scale Amazon storefronts to $50K–$300K+/month with precision PPC, listing architecture, and supply chain strategy.",
       },
       { name: "author", content: "Faisal Abdul" },
       { property: "og:title", content: "EcommercewithFaisal — Amazon Ecommerce Expert & Growth Strategist" },
       {
         property: "og:description",
         content:
-          "Faisal  helps e-commerce brands scale Amazon storefronts to $50K–$300K+/month with precision PPC, listing architecture, and supply chain strategy.",
+          "Faisal helps e-commerce brands scale Amazon storefronts to $50K–$300K+/month with precision PPC, listing architecture, and supply chain strategy.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -153,7 +162,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "twitter:description",
         content:
-          "Faisal  helps e-commerce brands scale Amazon storefronts to $50K–$300K+/month with precision PPC, listing architecture, and supply chain strategy.",
+          "Faisal helps e-commerce brands scale Amazon storefronts to $50K–$300K+/month with precision PPC, listing architecture, and supply chain strategy.",
       },
       {
         property: "og:image",
@@ -187,8 +196,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           t.src=v;s=b.getElementsByTagName(e)[0];
           s.parentNode.insertBefore(t,s)}(window, document,'script',
           'https://connect.facebook.net/en_US/fbevents.js');
-          fbq('init', '2284927479021798');
-          fbq('track', 'PageView');
+          fbq('init', '${PIXEL_ID}');
         `,
       },
     ],
@@ -215,10 +223,17 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const pathname = useRouterState({ select: (st) => st.location.pathname });
+  const isFirstRender = useRef(true);
+
+  // Automatically fires PageView across browser & server without needing user permission
+  useEffect(() => {
+    sendTrackingEvent("PageView");
+    isFirstRender.current = false;
+  }, [pathname]);
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
       <Toaster />
       <FloatingWhatsApp />
