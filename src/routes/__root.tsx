@@ -14,7 +14,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
 
-const PIXEL_ID = "2284927479021798";
+const PIXEL_ID = "1580596783386900";
 const CAPI_ENDPOINT = "https://meta-capi.hafeezbaad.workers.dev";
 
 // Global declaration for Meta Pixel fbq
@@ -25,13 +25,41 @@ declare global {
   }
 }
 
+// Fallback to ensure base Meta script is mounted immediately in client
+function ensurePixelLoaded() {
+  if (typeof window === "undefined") return;
+  if (!window.fbq) {
+    (function (f: any, b: any, e: any, v: any, n?: any, t?: any, s?: any) {
+      if (f.fbq) return;
+      n = f.fbq = function () {
+        n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+      };
+      if (!f._fbq) f._fbq = n;
+      n.push = n;
+      n.loaded = true;
+      n.version = "2.0";
+      n.queue = [];
+      t = b.createElement(e);
+      t.async = true;
+      t.src = v;
+      s = b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t, s);
+    })(window, document, "script", "https://connect.facebook.net/en_US/fbevents.js");
+
+    window.fbq("init", PIXEL_ID);
+  }
+}
+
 // Client helper for dual Pixel + CAPI tracking
 function sendTrackingEvent(eventName: string, customData: Record<string, unknown> = {}) {
   const eventId = `${eventName.toLowerCase()}_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
 
   // 1. Browser Meta Pixel
-  if (typeof window !== "undefined" && window.fbq) {
-    window.fbq("track", eventName, customData, { eventID: eventId });
+  if (typeof window !== "undefined") {
+    ensurePixelLoaded();
+    if (window.fbq) {
+      window.fbq("track", eventName, customData, { eventID: eventId });
+    }
   }
 
   // 2. Server CAPI via Cloudflare Worker
@@ -226,7 +254,7 @@ function RootComponent() {
   const pathname = useRouterState({ select: (st) => st.location.pathname });
   const isFirstRender = useRef(true);
 
-  // Automatically fires PageView across browser & server without needing user permission
+  // Automatically fires PageView across browser & server without waiting for user consent
   useEffect(() => {
     sendTrackingEvent("PageView");
     isFirstRender.current = false;
